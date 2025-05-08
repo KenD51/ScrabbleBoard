@@ -59,7 +59,7 @@ public:
 
 class LetterRack {
 private:
-    const int SIZE = 7;
+    static const int SIZE = 7;
     LetterTile rack[SIZE];
 public:
     LetterTile remove_letter(const char letter); 
