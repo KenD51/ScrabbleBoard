@@ -101,9 +101,11 @@ private:
     std::string name;     // The player's name.
     LetterRack rack;    // The player's letter rack.
     int points;         // The player's score.
+    int order_number;
 public:
     // Constructor for a Player.
     Player(std::string the_name, LetterRack the_rack);
+    int get_order_nunber() { return order_number; }
 
     // Plays a word on the board.
     void play_word(ScrabbleBoard& board, const std::string& word, int row, int col, char direction);
