@@ -184,6 +184,10 @@ int Player::calculate_score(const std::string& word) {
     return score;
 }
 
+int Player::get_order_number() const {
+    return order_number;
+}
+
 LetterRack Player::get_rack() const { // Added const
     return rack;
 }
