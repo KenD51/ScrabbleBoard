@@ -95,7 +95,9 @@ class Player {
 private:
     std::string name;
     LetterRack rack;
+    int order_number;
 public:
+    int get_order_number(){ return order_number;}
     int points = 0;
     Player (the_name, the_points) : name(the_name), points(the_points) {}
     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
