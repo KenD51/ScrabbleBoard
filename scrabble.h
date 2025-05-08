@@ -52,7 +52,7 @@ public:
         addTiles('Z', 1, 10);
         addTiles('*', 2, 0); // Blank tiles
     }
-    void addTiles(char letter, int count, int value;
+    void addTiles(char letter, int count, int value);
     bool is_empty() const;
     LetterTile draw_tile();
 };
