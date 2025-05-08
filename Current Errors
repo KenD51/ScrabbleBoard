@@ -1,0 +1,316 @@
+In file included from main.cpp:1:
+scrabble.h:55:52: error: expected ‘)’ before ‘;’ token
+   55 |     void addTiles(char letter, int count, int value;
+      |                  ~                                 ^
+      |                                                    )
+scrabble.h:24:29: error: field ‘std::vector LetterBag::LetterBag’ with same name as class [-fpermissive]
+   24 |     std::vector<LetterTile> LetterBag;
+      |                             ^~~~~~~~~
+scrabble.h:63:21: error: invalid use of non-static data member ‘LetterRack::SIZE’
+   63 |     LetterTile rack[SIZE];
+      |                     ^~~~
+scrabble.h:62:15: note: declared here
+   62 |     const int SIZE = 7;
+      |               ^~~~
+scrabble.h:99:21: error: expected ‘)’ before ‘,’ token
+   99 |     Player (the_name, the_rack, the_points) : name(the_name), rack(the_rack), points(the_points) {}
+      |            ~        ^
+      |                     )
+scrabble.h:100:47: error: expected ‘)’
+  100 |     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
+      |                   ~                           ^~~~
+      |                                               )
+scrabble.h:100:42: error: expected ‘;’ at end of member declaration
+  100 |     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
+      |                                          ^~~~~
+      |                                               ;
+scrabble.h:100:53: error: expected unqualified-id before ‘char’
+  100 |     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
+      |                                                     ^~~~
+scrabble.h:106:17: error: ‘string’ was not declared in this scope; did you mean ‘std::string’?
+  106 |     std::vector<string> winner;
+      |                 ^~~~~~
+      |                 std::string
+In file included from /usr/include/c++/13/string:41,
+                 from /usr/include/c++/13/random:42,
+                 from scrabble.h:6:
+/usr/include/c++/13/bits/stringfwd.h:77:33: note: ‘std::string’ declared here
+   77 |   typedef basic_string<char>    string;
+      |                                 ^~~~~~
+scrabble.h:106:23: error: template argument 1 is invalid
+  106 |     std::vector<string> winner;
+      |                       ^
+scrabble.h:106:23: error: template argument 2 is invalid
+scrabble.h:109:27: error: ‘Game’ has not been declared
+  109 |     void determine_winner(Game& scrabble);
+      |                           ^~~~
+scrabble.h:123:33: error: ‘vector’ does not name a type
+  123 |     bool isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction);
+      |                                 ^~~~~~
+scrabble.h:123:39: error: expected ‘,’ or ‘...’ before ‘<’ token
+  123 |     bool isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction);
+      |                                       ^
+In file included from gameboard.cpp:3:
+scrabble.h:55:52: error: expected ‘)’ before ‘;’ token
+   55 |     void addTiles(char letter, int count, int value;
+      |                  ~                                 ^
+      |                                                    )
+scrabble.h:24:29: error: field ‘std::vector LetterBag::LetterBag’ with same name as class [-fpermissive]
+   24 |     std::vector<LetterTile> LetterBag;
+      |                             ^~~~~~~~~
+scrabble.h:63:21: error: invalid use of non-static data member ‘LetterRack::SIZE’
+   63 |     LetterTile rack[SIZE];
+      |                     ^~~~
+scrabble.h:62:15: note: declared here
+   62 |     const int SIZE = 7;
+      |               ^~~~
+scrabble.h:99:21: error: expected ‘)’ before ‘,’ token
+   99 |     Player (the_name, the_rack, the_points) : name(the_name), rack(the_rack), points(the_points) {}
+      |            ~        ^
+      |                     )
+scrabble.h:100:47: error: expected ‘)’
+  100 |     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
+      |                   ~                           ^~~~
+      |                                               )
+scrabble.h:100:42: error: expected ‘;’ at end of member declaration
+  100 |     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
+      |                                          ^~~~~
+      |                                               ;
+scrabble.h:100:53: error: expected unqualified-id before ‘char’
+  100 |     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
+      |                                                     ^~~~
+scrabble.h:106:17: error: ‘string’ was not declared in this scope; did you mean ‘std::string’?
+  106 |     std::vector<string> winner;
+      |                 ^~~~~~
+      |                 std::string
+In file included from /usr/include/c++/13/string:41,
+                 from /usr/include/c++/13/random:42,
+                 from scrabble.h:6:
+/usr/include/c++/13/bits/stringfwd.h:77:33: note: ‘std::string’ declared here
+   77 |   typedef basic_string<char>    string;
+      |                                 ^~~~~~
+scrabble.h:106:23: error: template argument 1 is invalid
+  106 |     std::vector<string> winner;
+      |                       ^
+scrabble.h:106:23: error: template argument 2 is invalid
+scrabble.h:109:27: error: ‘Game’ has not been declared
+  109 |     void determine_winner(Game& scrabble);
+      |                           ^~~~
+scrabble.h:123:33: error: ‘vector’ does not name a type
+  123 |     bool isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction);
+      |                                 ^~~~~~
+scrabble.h:123:39: error: expected ‘,’ or ‘...’ before ‘<’ token
+  123 |     bool isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction);
+      |                                       ^
+gameboard.cpp:12:8: error: redefinition of ‘struct Square’
+   12 | struct Square {
+      |        ^~~~~~
+scrabble.h:71:8: note: previous definition of ‘struct Square’
+   71 | struct Square {
+      |        ^~~~~~
+scrabble.cpp:67:24: error: extended character ‘ is not valid in an identifier
+   67 |         if (rack[i] != ‘?’) {
+      |                        ^
+scrabble.cpp:67:26: error: extended character ’ is not valid in an identifier
+   67 |         if (rack[i] != ‘?’) {
+      |                          ^
+scrabble.cpp:132:18: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                  ^
+scrabble.cpp:132:18: error: extended character ’ is not valid in an identifier
+scrabble.cpp:132:28: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                            ^
+scrabble.cpp:132:28: error: extended character ’ is not valid in an identifier
+scrabble.cpp:132:38: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                                      ^
+scrabble.cpp:132:38: error: extended character ’ is not valid in an identifier
+scrabble.cpp:132:48: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                                                ^
+scrabble.cpp:132:48: error: extended character ’ is not valid in an identifier
+scrabble.cpp:132:58: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                                                          ^
+scrabble.cpp:132:58: error: extended character ’ is not valid in an identifier
+scrabble.cpp:132:68: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                                                                    ^
+scrabble.cpp:132:68: error: extended character ’ is not valid in an identifier
+scrabble.cpp:132:78: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                                                                              ^
+scrabble.cpp:132:78: error: extended character ’ is not valid in an identifier
+scrabble.cpp:132:88: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                                                                                        ^
+scrabble.cpp:132:88: error: extended character ’ is not valid in an identifier
+scrabble.cpp:132:98: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                                                                                                  ^
+scrabble.cpp:132:98: error: extended character ’ is not valid in an identifier
+scrabble.cpp:132:108: error: extended character ‘ is not valid in an identifier
+  132 |             case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
+      |                                                                                                            ^
+scrabble.cpp:132:108: error: extended character ’ is not valid in an identifier
+scrabble.cpp:133:18: error: extended character ‘ is not valid in an identifier
+  133 |             case ‘D’: case ‘G’: score += 2; break;
+      |                  ^
+scrabble.cpp:133:18: error: extended character ’ is not valid in an identifier
+scrabble.cpp:133:28: error: extended character ‘ is not valid in an identifier
+  133 |             case ‘D’: case ‘G’: score += 2; break;
+      |                            ^
+scrabble.cpp:133:28: error: extended character ’ is not valid in an identifier
+scrabble.cpp:134:18: error: extended character ‘ is not valid in an identifier
+  134 |             case ‘B’: case ‘C’: case ‘M’: case ‘P’: score += 3; break;
+      |                  ^
+scrabble.cpp:134:18: error: extended character ’ is not valid in an identifier
+scrabble.cpp:134:28: error: extended character ‘ is not valid in an identifier
+  134 |             case ‘B’: case ‘C’: case ‘M’: case ‘P’: score += 3; break;
+      |                            ^
+scrabble.cpp:134:28: error: extended character ’ is not valid in an identifier
+scrabble.cpp:134:38: error: extended character ‘ is not valid in an identifier
+  134 |             case ‘B’: case ‘C’: case ‘M’: case ‘P’: score += 3; break;
+      |                                      ^
+scrabble.cpp:134:38: error: extended character ’ is not valid in an identifier
+scrabble.cpp:134:48: error: extended character ‘ is not valid in an identifier
+  134 |             case ‘B’: case ‘C’: case ‘M’: case ‘P’: score += 3; break;
+      |                                                ^
+scrabble.cpp:134:48: error: extended character ’ is not valid in an identifier
+scrabble.cpp:135:18: error: extended character ‘ is not valid in an identifier
+  135 |             case ‘F’: case ‘H’: case ‘V’: case ‘W’: case ‘Y’: score += 4; break;
+      |                  ^
+scrabble.cpp:135:18: error: extended character ’ is not valid in an identifier
+scrabble.cpp:135:28: error: extended character ‘ is not valid in an identifier
+  135 |             case ‘F’: case ‘H’: case ‘V’: case ‘W’: case ‘Y’: score += 4; break;
+      |                            ^
+scrabble.cpp:135:28: error: extended character ’ is not valid in an identifier
+scrabble.cpp:135:38: error: extended character ‘ is not valid in an identifier
+  135 |             case ‘F’: case ‘H’: case ‘V’: case ‘W’: case ‘Y’: score += 4; break;
+      |                                      ^
+scrabble.cpp:135:38: error: extended character ’ is not valid in an identifier
+scrabble.cpp:135:48: error: extended character ‘ is not valid in an identifier
+  135 |             case ‘F’: case ‘H’: case ‘V’: case ‘W’: case ‘Y’: score += 4; break;
+      |                                                ^
+scrabble.cpp:135:48: error: extended character ’ is not valid in an identifier
+scrabble.cpp:135:58: error: extended character ‘ is not valid in an identifier
+  135 |             case ‘F’: case ‘H’: case ‘V’: case ‘W’: case ‘Y’: score += 4; break;
+      |                                                          ^
+scrabble.cpp:135:58: error: extended character ’ is not valid in an identifier
+scrabble.cpp:136:18: error: extended character ‘ is not valid in an identifier
+  136 |             case ‘K’: score += 5; break;
+      |                  ^
+scrabble.cpp:136:18: error: extended character ’ is not valid in an identifier
+scrabble.cpp:137:18: error: extended character ‘ is not valid in an identifier
+  137 |             case ‘J’: case ‘X’: score += 8; break;
+      |                  ^
+scrabble.cpp:137:18: error: extended character ’ is not valid in an identifier
+scrabble.cpp:137:28: error: extended character ‘ is not valid in an identifier
+  137 |             case ‘J’: case ‘X’: score += 8; break;
+      |                            ^
+scrabble.cpp:137:28: error: extended character ’ is not valid in an identifier
+scrabble.cpp:138:18: error: extended character ‘ is not valid in an identifier
+  138 |             case ‘Q’: case ‘Z’: score += 10; break;
+      |                  ^
+scrabble.cpp:138:18: error: extended character ’ is not valid in an identifier
+scrabble.cpp:138:28: error: extended character ‘ is not valid in an identifier
+  138 |             case ‘Q’: case ‘Z’: score += 10; break;
+      |                            ^
+scrabble.cpp:138:28: error: extended character ’ is not valid in an identifier
+In file included from scrabble.cpp:1:
+scrabble.h:55:52: error: expected ‘)’ before ‘;’ token
+   55 |     void addTiles(char letter, int count, int value;
+      |                  ~                                 ^
+      |                                                    )
+scrabble.h:24:29: error: field ‘std::vector LetterBag::LetterBag’ with same name as class [-fpermissive]
+   24 |     std::vector<LetterTile> LetterBag;
+      |                             ^~~~~~~~~
+scrabble.h:63:21: error: invalid use of non-static data member ‘LetterRack::SIZE’
+   63 |     LetterTile rack[SIZE];
+      |                     ^~~~
+scrabble.h:62:15: note: declared here
+   62 |     const int SIZE = 7;
+      |               ^~~~
+scrabble.h:99:21: error: expected ‘)’ before ‘,’ token
+   99 |     Player (the_name, the_rack, the_points) : name(the_name), rack(the_rack), points(the_points) {}
+      |            ~        ^
+      |                     )
+scrabble.h:100:47: error: expected ‘)’
+  100 |     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
+      |                   ~                           ^~~~
+      |                                               )
+scrabble.h:100:42: error: expected ‘;’ at end of member declaration
+  100 |     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
+      |                                          ^~~~~
+      |                                               ;
+scrabble.h:100:53: error: expected unqualified-id before ‘char’
+  100 |     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
+      |                                                     ^~~~
+scrabble.h:106:17: error: ‘string’ was not declared in this scope; did you mean ‘std::string’?
+  106 |     std::vector<string> winner;
+      |                 ^~~~~~
+      |                 std::string
+In file included from /usr/include/c++/13/string:41,
+                 from /usr/include/c++/13/random:42,
+                 from scrabble.h:6:
+/usr/include/c++/13/bits/stringfwd.h:77:33: note: ‘std::string’ declared here
+   77 |   typedef basic_string<char>    string;
+      |                                 ^~~~~~
+scrabble.h:106:23: error: template argument 1 is invalid
+  106 |     std::vector<string> winner;
+      |                       ^
+scrabble.h:106:23: error: template argument 2 is invalid
+scrabble.h:109:27: error: ‘Game’ has not been declared
+  109 |     void determine_winner(Game& scrabble);
+      |                           ^~~~
+scrabble.h:123:33: error: ‘vector’ does not name a type
+  123 |     bool isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction);
+      |                                 ^~~~~~
+scrabble.h:123:39: error: expected ‘,’ or ‘...’ before ‘<’ token
+  123 |     bool isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction);
+      |                                       ^
+scrabble.cpp: In member function ‘void LetterBag::addTiles(char, int, int)’:
+scrabble.cpp:24:9: error: ‘letter_bag’ was not declared in this scope; did you mean ‘LetterBag’?
+   24 |         letter_bag.emplace_back(letter, value);
+      |         ^~~~~~~~~~
+      |         LetterBag
+scrabble.cpp: In member function ‘LetterTile LetterBag::draw_tile()’:
+scrabble.cpp:36:5: error: expected primary-expression before ‘catch’
+   36 |     catch (std::runtime_error& err) {
+      |     ^~~~~
+scrabble.cpp:46:45: error: ‘letter_bag’ was not declared in this scope; did you mean ‘LetterBag’?
+   46 |     std::uniform_int_distribution<> dist(0, letter_bag.size() - 1);
+      |                                             ^~~~~~~~~~
+      |                                             LetterBag
+scrabble.cpp:54:37: error: qualified-id in declaration before ‘(’ token
+   54 | LetterTile LetterRack::remove_letter(char letter) {
+      |                                     ^
+scrabble.cpp:65:26: error: qualified-id in declaration before ‘(’ token
+   65 | bool LetterRack::is_empty() {
+      |                          ^
+scrabble.cpp:395:2: error: expected ‘}’ at end of input
+  395 | }
+      |  ^
+scrabble.cpp:33:9: note: to match this ‘{’
+   33 |     try {
+      |         ^
+scrabble.cpp:395:2: error: expected ‘catch’ at end of input
+  395 | }
+      |  ^
+scrabble.cpp:395:2: error: expected ‘(’ at end of input
+  395 | }
+      |  ^
+      |  (
+scrabble.cpp:395:2: error: expected type-specifier at end of input
+scrabble.cpp:395:2: error: expected ‘)’ at end of input
+  395 | }
+      |  ^
+      |  )
+scrabble.cpp:395:2: error: expected ‘{’ at end of input
+scrabble.cpp:395:2: error: expected ‘}’ at end of input
+scrabble.cpp:32:35: note: to match this ‘{’
+   32 | LetterTile LetterBag::draw_tile() {
+      |                                   ^
+scrabble.cpp:395:2: warning: control reaches end of non-void function [-Wreturn-type]
+  395 | }
