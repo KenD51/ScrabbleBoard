@@ -105,7 +105,7 @@ private:
 public:
     // Constructor for a Player.
     Player(std::string the_name, LetterRack the_rack);
-    int get_order_nunber() { return order_number; }
+    int get_order_nunber();
 
     // Plays a word on the board.
     void play_word(ScrabbleBoard& board, const std::string& word, int row, int col, char direction);
