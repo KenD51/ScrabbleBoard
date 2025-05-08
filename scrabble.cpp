@@ -64,13 +64,13 @@ LetterTile LetterRack::remove_letter(char letter) {
 
 bool LetterRack::is_empty() {
     for (int i = 0; i < 7; i++) {
-        if (rack[i] != ‘?’) {
+        if (rack[i] != ?) {
             return false;
 }
 
 void LetterRack::fill_rack(LetterBag& bag) {
     for (int i = 0; i < SIZE; i++) {
-        if (rack[i].letter == '?' && !bag.is_empty()) {
+        if (rack[i].letter == ? && !bag.is_empty()) {
             rack[i] = bag.draw_tile();
         }
     }
