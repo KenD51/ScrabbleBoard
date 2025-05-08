@@ -8,10 +8,7 @@
 
 using namespace std;
 
-// Structure to represent a square on the board
-struct Square {
-    char letter = ' ';
-};
+
 
 // this is a 2D vector that creates the scrabble board that is 15 x 15
 vector<vector<Square>> initializeBoard() {
