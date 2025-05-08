@@ -65,6 +65,7 @@ public:
     LetterTile remove_letter(const char letter); 
     void fill_rack();
     void print_rack() const;
+    bool is_empty();
 };
 
 //This is a tile. Will merge later with scrabble board.
@@ -99,6 +100,7 @@ public:
     Player (the_name, the_rack, the_points) : name(the_name), rack(the_rack), points(the_points) {}
     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
     int calculate_score(const std::string& word);
+    LetterRack get_rack();
 };
 
 class EndGame : public Player {
