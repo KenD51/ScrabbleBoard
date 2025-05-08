@@ -8,8 +8,6 @@
 
 using namespace std;
 
-
-
 // this is a 2D vector that creates the scrabble board that is 15 x 15
 vector<vector<Square>> initializeBoard() {
     return vector<vector<Square>>(15, vector<Square>(15));
