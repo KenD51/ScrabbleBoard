@@ -97,7 +97,7 @@ private:
     LetterRack rack;
 public:
     int points = 0;
-    Player (the_name, the_rack, the_points) : name(the_name), rack(the_rack), points(the_points) {}
+    Player (the_name, the_points) : name(the_name), points(the_points) {}
     void play_word(ScrabbleBoard& board, const std::char& tile, int row, int col, bool horizontal);
     int calculate_score(const std::string& word);
     LetterRack get_rack();
