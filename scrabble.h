@@ -21,7 +21,7 @@ public:
 };
 class LetterBag {
 public:
-    std::vector<LetterTile> LetterBag;
+    std::vector<LetterTile> Bag;
     LetterBag() {
         // Initialize the letter bag with the standard Scrabble distribution
         addTiles('A', 9, 1);//(letter, amount, score)
