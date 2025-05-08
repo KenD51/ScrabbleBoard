@@ -1,6 +1,13 @@
 #include "scrabble.h"
 #include <fstream>
 #include <unordered_set>
+#include <vector>
+#include <algorithm>
+#include <random>
+#include <ctime>
+#include <iostream>
+#include <string>
+#include <cstdlib>
 
 // LetterTile implementation
 int LetterTile::get_point_value() const {
