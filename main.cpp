@@ -19,25 +19,30 @@ vector<vector<Square>> initializeBoard() {
 
 // Function to print the Scrabble board
 void printBoard(const vector<vector<Square>>& board) {
+    //Creates the header and the column numbers
     cout << "   ";
     for (int j = 0; j < 15; ++j) {
         cout << setw(4) << j + 1 << " ";
     }
+    //Creates the ___ line for the column
     cout << endl;
     cout << "   ";
     for (int j = 0; j < 15; ++j) {
         cout << "______";
     }
     cout << endl;
+//Creates the rows.
     for (int i = 0; i < 15; ++i) {
         cout << setw(2) << i + 1 << " |";
         for (int j = 0; j < 15; ++j) {
-            if (i == 6 && j == 6) { // Row 7, Column 7 (0-indexed)
+            if (i == 6 && j == 6) { //Places a star in the middle 
                 cout << setw(4) << "*" << "|";
             } else {
+		//When printing the board again, the entire word is capitalized
                 cout << setw(4) << (board[i][j].letter == ' ' ? " " : string(1, toupper(board[i][j].letter))) << "|";
             }
         }
+	//Formatting lines for the rows
         cout << endl << "   ";
         for (int j = 0; j < 15; ++j) {
             cout << "_____";
