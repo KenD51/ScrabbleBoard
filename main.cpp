@@ -104,11 +104,12 @@ bool placeWord(vector<vector<Square>>& board, const string& word, int row, int c
         col--; // Adjusting to 0-based indexing
         direction = toupper(direction);
 
-	  //Writes the word horizontally 
+	  //Writes the word horizontally, left to right.
         if (direction == 'H') {
             for (int i = 0; i < wordLength; ++i) {
                 board[row][col + i].letter = toupper(word[i]);
             }
+	//Writes the word horizontally, up to down.
         } else if (direction == 'V') {
             for (int i = 0; i < wordLength; ++i) {
                 board[row + i][col].letter = toupper(word[i]);
