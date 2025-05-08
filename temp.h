@@ -37,6 +37,7 @@ public:
     void print_rack() const;
     bool is_empty() const;
     int get_size() const;
+    int get_tile_point_value(int index) const;
 };
 
 struct Square {
@@ -90,6 +91,7 @@ public:
     Game();
     void play_game();
     void determine_turn_order();
+    const std::vector<Player>& get_players() const;
 };
 
 #endif
