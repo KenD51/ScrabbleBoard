@@ -67,21 +67,27 @@ public:
     void print_rack() const;
 };
 
+//This is a tile. Will merge later with scrabble board.
+struct Square {
+    char letter = ' ';
+};
+
 class ScrabbleBoard {
 private:
-    static const int dimension = 15; // Fixed size for the Scrabble board
-    char board[dimension][dimension]; // 2D array to represent the board
+        std::vector<std::vector<Square>> board; //2D Vector
+        static const int BOARD_SIZE = 15; //Scrabble board has a length and width of 15 tiles. For error checking.
 public:
-    ScrabbleBoard() {
-        // Initialize the board with spaces
-        for (int i = 0; i < dimension; ++i) {
-            for (int j = 0; j < dimension; ++j) {
-                board[i][j] = ' ';
-            }
-        }
-    }
-    void print_board() const;
-    bool is_valid_placement(const std::string& word, int row, int col, bool horizontal);
+    // Constructor to initialize the board
+    ScrabbleBoard() : board(BOARD_SIZE, std::vector<Square>(BOARD_SIZE)) {}
+
+    // Function to check if the given word placement is valid
+    bool isValidPlacement(const std::string& word, int row, int col, char direction) const;
+
+    //Function to print the board
+    void printBoard() const;
+
+    // Function to place a word on the board (if placement is valid)
+    bool placeWord(const std::string& word, int row, int col, char direction);
 };
 
 class Player {
