@@ -30,8 +30,14 @@ bool LetterBag::is_empty() const {
 }
 
 LetterTile LetterBag::draw_tile() {
-    if (LetterBag.empty()) {
-         throw std::runtime_error("Bag is empty");
+    try {
+	if (LetterBag.empty()) {
+            throw std::runtime_error("Bag is empty");
+    catch (std::runtime_error& err) {
+        if (player.get_rack().is_empty() == true) {
+            EndGame end;
+	    end.determinewinner(*this);
+	}
     }
     
     // Randomly select a tile
@@ -54,6 +60,12 @@ LetterTile LetterRack::remove_letter(char letter) {
         }
     }
     throw std::domain_error("The rack does not contain that letter.");
+}
+
+bool LetterRack::is_empty() {
+    for (int i = 0; i < 7; i++) {
+        if (rack[i] != ‘?’) {
+            return false;
 }
 
 void LetterRack::fill_rack(LetterBag& bag) {
@@ -112,10 +124,6 @@ bool ScrabbleBoard::is_valid_placement(const std::string& word, int row, int col
     return true;
 }
 
-void ScrabbleBoard::print_board() const {
-	see Kenshin’s code in main.cpp
-        }
-
 // Player implementation
 int Player::calculate_score(const std::string& word) {
     int score = 0;
@@ -132,6 +140,10 @@ int Player::calculate_score(const std::string& word) {
         }
     }
     return score;
+}
+
+LetterRack Player::get_rack() {
+    return rack;
 }
 
 void Player::play_word(ScrabbleBoard& board, const std::string& word, int row, int col, bool horizontal) {
