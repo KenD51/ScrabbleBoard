@@ -129,13 +129,13 @@ int Player::calculate_score(const std::string& word) {
     int score = 0;
     for (char c : word) {
         switch (c) { /* switch statement select one of many code blocks to be executed; the value of the expression is compared with the values of each case; if there is a match, the associated block of code is executed */
-            case ‘A’: case ‘E’: case ‘I’: case ‘L’: case ‘N’: case ‘O’: case ‘R’: case ‘S’: case ‘T’: case ‘U’: score += 1; break;
-            case ‘D’: case ‘G’: score += 2; break;
-            case ‘B’: case ‘C’: case ‘M’: case ‘P’: score += 3; break;
-            case ‘F’: case ‘H’: case ‘V’: case ‘W’: case ‘Y’: score += 4; break;
-            case ‘K’: score += 5; break;
-            case ‘J’: case ‘X’: score += 8; break;
-            case ‘Q’: case ‘Z’: score += 10; break;
+            case 'A': case 'E': case 'I': case 'L': case 'N': case 'O': case 'R': case 'S': case 'T': case 'U': score += 1; break;
+            case 'D': case 'G': score += 2; break;
+            case 'B': case 'C': case 'M': case 'P': score += 3; break;
+            case 'F': case 'H': case 'V': case 'W': case 'Y': score += 4; break;
+            case 'K': score += 5; break;
+            case 'J': case ‘X’: score += 8; break;
+            case 'Q': case ‘Z’: score += 10; break;
             default: score += 0; break;
         }
     }
