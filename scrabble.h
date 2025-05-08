@@ -1,3 +1,6 @@
+#ifndef SCRABBLE_H
+#define SCRABBLE_H
+
 #include <vector>
 #include <algorithm>
 #include <random>
@@ -5,6 +8,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <string>
 
 class LetterTile {
 private:
@@ -113,3 +117,5 @@ public:
     bool isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction);
     void determine_turn_order();
 };
+
+#endif
