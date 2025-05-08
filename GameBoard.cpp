@@ -1,8 +1,9 @@
+// gameboard.cpp
+#include "scrabble.h"
 #include <iostream>
 #include <iomanip>
-#include <vector>
-#include <string>
 #include <cctype> // For toupper
+#include <string>
 
 using namespace std;
 
