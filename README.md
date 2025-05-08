@@ -1,2 +1,0 @@
-# ScrabbleBoard
-Scrabble Board
