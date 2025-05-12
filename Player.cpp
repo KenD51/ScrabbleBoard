@@ -1,6 +1,8 @@
+#include "scrabble.h"
 
-#include "Player.h"
-  //E --> error: 3
+//Changed the header to point to scrabble.h. 
+//Used my gameboard code's placeWord to place words
+//Addded error handing for play_word
 
 // Constructor: Initializes player with zero points
 Player::Player() : points(0) {}
@@ -8,20 +10,18 @@ Player::Player() : points(0) {}
 // Places word on board and calculates score
 void Player::play_word(ScrabbleBoard& board, const std::string& word, 
                        int row, int col, bool horizontal) {
-    // Place each letter on the board
-    for (size_t i = 0; i < word.length(); ++i) { //error1: Implicit conversion loses integer precision: 'size_t' (aka 'unsigned long') to 'int'
-        int r = horizontal ? row : row + i;
-        int c = horizontal ? col + i : col;
-        board.board[r][c] = word[i];// E2: 'board' is a private member of 'ScrabbleBoard' + no viable overloaded '='
-    }
-    
-    // Add word score to player's total
-    points += calculate_score(word);
-    
-    // Check for bingo (using all tiles)
-    if (word.length() == 7) {
-        points += 50;
-        std::cout << "Bingo! 50 bonus points added!" << std::endl;
+    // Place the word on the board (checking validity via board's placeWord)
+    if (board.placeWord(word, row, col, horizontal)) {  // Calls placeWord from GameBoard
+        // Add word score to player's total
+        points += calculate_score(word);
+        
+        // Check for bingo (using all tiles)
+        if (word.length() == 7) {
+            points += 50;
+            std::cout << "Bingo! 50 bonus points added!" << std::endl;
+        }
+    } else {
+        std::cout << "Invalid word placement!" << std::endl;
     }
 }
 
@@ -36,7 +36,7 @@ int Player::calculate_score(const std::string& word) {
                 score += 1; break;
             case 'D': case 'G':
                 score += 2; break;
-            // ... (other cases)
+            // ... (other cases for other letters)
             default:
                 score += 0; break; // For blank tiles
         }
@@ -45,7 +45,7 @@ int Player::calculate_score(const std::string& word) {
 }
 
 // Setter for player name
-void Player::set_name(const std::string& name) {// E3: Out-of-line definition of 'set_name' does not match any declaration in 'Player'
+void Player::set_name(const std::string& name) {  // E3: Out-of-line definition of 'set_name' does not match any declaration in 'Player'
     this->name = name;
 }
 
@@ -58,4 +58,3 @@ std::string Player::get_name() const {
 int Player::get_points() const {
     return points;
 }
-
