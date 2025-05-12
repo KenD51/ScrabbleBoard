@@ -1,4 +1,4 @@
-LetterRack.cpp
+
 #include "LetterRack.h"
 #include <iostream>
 
