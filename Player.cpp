@@ -1,11 +1,16 @@
 #include "scrabble.h"
 
-//Changed the header to point to scrabble.h. 
-//Used my gameboard code's placeWord to place words
-//Addded error handing for play_word
-
-// Constructor: Initializes player with zero points
+// Default Constructor: Initializes player with zero points
 Player::Player() : points(0) {}
+
+// Constructor
+Player(std::string the_name = "Player", int the_points = 0) : name(the_name), points(the_points) {}
+
+// Get the order number
+int Player::get_order_number() const { return order_number; }
+
+// Get the points for the player
+int Player::get_points() const { return points; }
 
 // Places word on board and calculates score
 void Player::play_word(ScrabbleBoard& board, const std::string& word, 
@@ -44,6 +49,9 @@ int Player::calculate_score(const std::string& word) {
     return score;
 }
 
+// Getter for the rack
+LetterRack Player::get_rack() const { return rack; }
+
 // Setter for player name
 void Player::set_name(const std::string& name) {  // E3: Out-of-line definition of 'set_name' does not match any declaration in 'Player'
     this->name = name;
@@ -54,7 +62,5 @@ std::string Player::get_name() const {
     return name;
 }
 
-// Getter for player points
-int Player::get_points() const {
-    return points;
-}
+// Set order number
+void Player::set_order_number(int order) { order_number = order; }
