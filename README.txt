@@ -11,6 +11,6 @@ Compilation Instructions:
    a. Typing ls shows you the contents of your current directory
    b. Typing pwd shows you where you are
    c. Typing cd ______ changes your directory to the one you specificed
-6. Compile by typing: c++ -o play main.cpp Player.cpp Game.cpp GameBoard.cpp EndGame.cpp LetterBag.cpp LetterRack.cpp LetterTile.cpp
-7. Run the executable by typing: ./play
-8. Play scrabble by following the instructions outputted to the screen
+7. Compile by typing: c++ -o play main.cpp Player.cpp Game.cpp GameBoard.cpp EndGame.cpp LetterBag.cpp LetterRack.cpp LetterTile.cpp
+8. Run the executable by typing: ./play
+9. Play scrabble by following the instructions outputted to the screen
