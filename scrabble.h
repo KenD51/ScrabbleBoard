@@ -150,9 +150,6 @@ public:
     // Starts the game
     void play_game();
 
-    // Function to check if the word can be placed on the board
-    bool isValidPlacement(const std::vector<std::vector<Square>>& board, const std::string& word, int row, int col, char direction);
-
     // Determines the turn order of the players
     void determine_turn_order();
 };
