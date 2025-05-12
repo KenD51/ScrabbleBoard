@@ -1,4 +1,4 @@
-#include<"Endgame.h">
+#include<"EndGame.h">
 #include <climits>
 #include <iostream>
 
