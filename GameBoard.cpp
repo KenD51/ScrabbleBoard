@@ -1,5 +1,6 @@
 // gameboard.cpp
-//This cpp file contains the implementations of the Scrabble board class. It prints the board and allows words to be placed on the board, while also validating them.
+// This cpp file contains the implementations of the Scrabble board class. It prints the board and allows words to be placed on the board, while also validating them.
+
 #include "scrabble.h"
 #include <iostream>
 #include <iomanip>
@@ -27,18 +28,19 @@ void printBoard(const vector<vector<Square>>& board) {
         cout << "______";
     }
     cout << endl;
-//Creates the rows.
+
+    //Creates the rows.
     for (int i = 0; i < 15; ++i) {
         cout << setw(2) << i + 1 << " |";
         for (int j = 0; j < 15; ++j) {
-            if (i == 6 && j == 6) { //Places a star in the middle 
+            if (i == 6 && j == 6) { //Places a star in the middle
                 cout << setw(4) << "*" << "|";
             } else {
-		//When printing the board again, the entire word is capitalized
+                //When printing the board again, the entire word is capitalized
                 cout << setw(4) << (board[i][j].letter == ' ' ? " " : string(1, toupper(board[i][j].letter))) << "|";
             }
         }
-	//Formatting lines for the rows
+        //Formatting lines for the rows
         cout << endl << "   ";
         for (int j = 0; j < 15; ++j) {
             cout << "_____";
@@ -46,7 +48,8 @@ void printBoard(const vector<vector<Square>>& board) {
         cout << endl;
     }
 }
-// Function to check if the given word is valid. Checks if the word placed goes off the board or if is not fiven a valid direction.
+
+// Function to check if the given word is valid. Checks if the word placed goes off the board or if is not given a valid direction.
 bool isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction) {
     int wordLength = word.length();
     int boardSize = 15;
@@ -55,35 +58,45 @@ bool isValidPlacement(const vector<vector<Square>>& board, const string& word, i
     col--; // Adjusting to 0-based indexing
     direction = toupper(direction);
 
-    //Case 1: Given coordinates are off the board
+    // Case 1: Given coordinates are off the board
     if (row < 0 || row >= boardSize || col < 0 || col >= boardSize) {
         cout << "Starting position is off the board." << endl;
         return false;
     }
 
-    //Case 2: Horizontal coordinates go off board
+    // Case 2: Horizontal coordinates go off board
     if (direction == 'H') {
         if (col + wordLength > boardSize) {
             cout << "Word goes off the board (horizontally)." << endl;
             return false;
         }
-	  //Case passes
-        return true;
-    //Case 3: Vertical coordinates go off board
+
+        // Check if the horizontal placement overlaps with existing letters
+        for (int i = 0; i < wordLength; ++i) {
+            if (board[row][col + i].letter != ' ' && board[row][col + i].letter != toupper(word[i])) {
+                cout << "There is already a letter in the way (horizontal)." << endl;
+                return false;
+            }
+        }
     } else if (direction == 'V') {
         if (row + wordLength > boardSize) {
             cout << "Word goes off the board (vertically)." << endl;
             return false;
         }
-        //Case passes
-        return true;
 
-    } 
-	//Case 3: Wrong letter
-else {
+        // Check if the vertical placement overlaps with existing letters
+        for (int i = 0; i < wordLength; ++i) {
+            if (board[row + i][col].letter != ' ' && board[row + i][col].letter != toupper(word[i])) {
+                cout << "There is already a letter in the way (vertical)." << endl;
+                return false;
+            }
+        }
+    } else {
         cout << "Invalid direction. Use 'H' for horizontal or 'V' for vertical." << endl;
         return false;
     }
+
+    return true;
 }
 
 // Function to place a word on the board (if placement is valid)
@@ -94,12 +107,11 @@ bool placeWord(vector<vector<Square>>& board, const string& word, int row, int c
         col--; // Adjusting to 0-based indexing
         direction = toupper(direction);
 
-	  //Writes the word horizontally, left to right.
+        // Writes the word horizontally, left to right
         if (direction == 'H') {
             for (int i = 0; i < wordLength; ++i) {
                 board[row][col + i].letter = toupper(word[i]);
             }
-	//Writes the word horizontally, up to down.
         } else if (direction == 'V') {
             for (int i = 0; i < wordLength; ++i) {
                 board[row + i][col].letter = toupper(word[i]);
@@ -109,4 +121,3 @@ bool placeWord(vector<vector<Square>>& board, const string& word, int row, int c
     }
     return false;
 }
-
