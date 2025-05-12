@@ -9,13 +9,16 @@
 
 using namespace std;
 
+// Constructor
+GameBoard::GameBoard() : board(BOARD_SIZE, std::vector<Square>(BOARD_SIZE)) {}
+
 // this is a 2D vector that creates the scrabble board that is 15 x 15
-vector<vector<Square>> initializeBoard() {
+Gameboard::vector<vector<Square>> initializeBoard() {
     return vector<vector<Square>>(15, vector<Square>(15));
 }
 
 // Function to print the Scrabble board
-void printBoard(const vector<vector<Square>>& board) {
+void Gameboard::printBoard(const vector<vector<Square>>& board) {
     //Creates the header and the column numbers
     cout << "   ";
     for (int j = 0; j < 15; ++j) {
@@ -50,7 +53,7 @@ void printBoard(const vector<vector<Square>>& board) {
 }
 
 // Function to check if the given word is valid. Checks if the word placed goes off the board or if is not given a valid direction.
-bool isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction) {
+bool GameBoard::isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction) {
     int wordLength = word.length();
     int boardSize = 15;
 
@@ -100,7 +103,7 @@ bool isValidPlacement(const vector<vector<Square>>& board, const string& word, i
 }
 
 // Function to place a word on the board (if placement is valid)
-bool placeWord(vector<vector<Square>>& board, const string& word, int row, int col, char direction) {
+bool GameBoard::placeWord(vector<vector<Square>>& board, const string& word, int row, int col, char direction) {
     if (isValidPlacement(board, word, row, col, direction)) {
         int wordLength = word.length();
         row--; // Adjusting to 0-based indexing
