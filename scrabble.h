@@ -1,9 +1,3 @@
-//I changed The get_letter() method to correctly return char instead of int, as the letter itself is a char.
-//I fixed constructor for Player to accept a std::string for the player's name and an int for their points.
-//Compilors think letter rack is missing: remove_letter, fill_rack, print_rack, and is_empty, so i added them
-//Removed duplicate #include <string> to avoid redundancy.
-//Added game.h def
-
 #ifndef SCRABBLE_H
 #define SCRABBLE_H
 
@@ -14,7 +8,6 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
-#include <string>
 
 class LetterTile {
 private:
@@ -22,29 +15,8 @@ private:
     int point_value;
 public:
     LetterTile(char the_letter, int the_value) : letter(the_letter), point_value(the_value) {}
-    int get_letter() const;
+    char get_letter() const; // Corrected return type
     int get_point_value() const;
-};
-
-//Apparentlty there isn't a letterrack class
-class LetterRack {
-private:
-    static const int SIZE = 7;
-    LetterTile rack[SIZE];
-    int tile_count = 0;
-public:
-    LetterRack() { // Default constructor
-        for (int i = 0; i < SIZE; ++i) {
-            rack[i] = LetterTile(' ', 0); // Initialize with a space and 0 points
-        }
-        tile_count = 0;
-    }
-    LetterTile remove_letter(char letter);
-    void fill_rack(LetterBag& bag);
-    void print_rack() const;
-    bool is_empty() const { return tile_count == 0; }
-    int get_tile_count() const { return tile_count; }
-    void add_tile(const LetterTile& tile);
 };
 
 class LetterBag {
@@ -88,14 +60,22 @@ class LetterRack {
 private:
     static const int SIZE = 7;
     LetterTile rack[SIZE];
+    int tile_count = 0;
 public:
-    LetterTile remove_letter(const char letter);
-    void fill_rack();
+    LetterRack() { // Default constructor
+        for (int i = 0; i < SIZE; ++i) {
+            rack[i] = LetterTile(' ', 0); // Initialize with a space and 0 points
+        }
+        tile_count = 0;
+    }
+    LetterTile remove_letter(char letter); // Consistent parameter type
+    void fill_rack(LetterBag& bag);       // Takes LetterBag&
     void print_rack() const;
-    bool is_empty();
+    bool is_empty() const;             // Consistent const
+    int get_tile_count() const { return tile_count; }
+    void add_tile(const LetterTile& tile);
 };
 
-//This is a tile. Will merge later with scrabble board.
 struct Square {
     char letter = ' ';
 };
@@ -115,7 +95,7 @@ public:
     void printBoard() const;
 
     // Function to place a word on the board (if placement is valid)
-    bool placeWord(const std::string& word, int row, int col, char direction);
+    bool placeWord(const std::string& word, int row, int col, char direction); // Consistent direction type
 };
 
 // Player Class
@@ -124,34 +104,38 @@ private:
     std::string name;
     LetterRack rack;
     int order_number;
+    int points; // Private member
 public:
-    int get_order_number() { return order_number; }
-    int points = 0;
+    int get_order_number() const { return order_number; }
+    int get_points() const { return points; }
     Player(std::string the_name = "Player", int the_points = 0) : name(the_name), points(the_points) {}
     void play_word(ScrabbleBoard& board, const std::string& word, int row, int col, bool horizontal);
     int calculate_score(const std::string& word);
-    LetterRack get_rack();
+    LetterRack get_rack() const; // Return by value for now
     void set_name(const std::string& name);
     std::string get_name() const;
-    int get_points() const;
+    void set_order_number(int order) { order_number = order; }
 };
 
 // Game Class
 class Game {
 private:
-    int pass_count;              // To track the number of consecutive passes
-    int playerNum;               // Number of players in the game
+    int pass_count;         // To track the number of consecutive passes
+    int playerNum;          // Number of players in the game
     std::vector<Player> players; // Vector to hold players
-    ScrabbleBoard board;         // The Scrabble board
-    LetterBag bag;               // The letter bag for tile drawing
+    ScrabbleBoard board;      // The Scrabble board
+    LetterBag bag;          // The letter bag for tile drawing
+    int current_player_index; // To track the current player's turn
 
 public:
-    Game();                      // Constructor to initialize the game
-    void play_game();             // Main game loop
-    int get_pass_count() const;   // Get the number of consecutive passes
-    void determine_winner();      // Method to determine the winner based on points
-    void determine_turn_order();  // Method to set up the turn order
+    Game(int num_players = 0);         // Constructor to initialize the game
+    void play_game();                 // Main game loop
+    int get_pass_count() const;       // Get the number of consecutive passes
+    void determine_winner();           // Method to determine the winner based on points
+    void determine_turn_order();       // Method to set up the turn order
+    void next_player();
+    Player& get_current_player();
+    bool is_game_over() const;
 };
 
 #endif
-
