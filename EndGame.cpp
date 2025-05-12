@@ -1,4 +1,4 @@
-#include<"EndGame.h">
+#include<"temp.h">
 #include <climits>
 #include <iostream>
 
