@@ -3,7 +3,7 @@
 // CS 116
 // Spring 2025
 
-#include "Game.h"
+#include "scrabble.h"
 #include <iostream>
 #include <stdexcept>
 
