@@ -26,6 +26,27 @@ public:
     int get_point_value() const;
 };
 
+//Apparentlty there isn't a letterrack class
+class LetterRack {
+private:
+    static const int SIZE = 7;
+    LetterTile rack[SIZE];
+    int tile_count = 0;
+public:
+    LetterRack() { // Default constructor
+        for (int i = 0; i < SIZE; ++i) {
+            rack[i] = LetterTile(' ', 0); // Initialize with a space and 0 points
+        }
+        tile_count = 0;
+    }
+    LetterTile remove_letter(char letter);
+    void fill_rack(LetterBag& bag);
+    void print_rack() const;
+    bool is_empty() const { return tile_count == 0; }
+    int get_tile_count() const { return tile_count; }
+    void add_tile(const LetterTile& tile);
+};
+
 class LetterBag {
 public:
     std::vector<LetterTile> Bag;
