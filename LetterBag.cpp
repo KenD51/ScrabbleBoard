@@ -1,5 +1,5 @@
-LetterBag.cpp
-#include "LetterBag.h"
+// LetterBag.cpp
+#include "scrabble.h"
 #include <random>
 
 // Constructor: Initializes the bag with standard Scrabble tile distribution
