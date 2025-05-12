@@ -2,6 +2,14 @@
 #include "scrabble.h"
 #include <iostream>
 
+// Default Constructor
+LetterRack::LetterRack() {
+    for (int i = 0; i < SIZE; ++i) {
+        rack[i] = LetterTile(' ', 0); // Initialize with a space and 0 points
+    }
+    tile_count = 0;
+}
+
 // Removes a specific letter from the rack
 LetterTile LetterRack::remove_letter(char letter) {
     for (int i = 0; i < SIZE; i++) {
@@ -33,3 +41,5 @@ void LetterRack::print_rack() const {
     std::cout << std::endl;
 }
 
+// Get the number of tiles currently in the rack
+int LetterRack::get_tile_count() const { return tile_count; }
