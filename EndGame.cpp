@@ -1,3 +1,4 @@
+// EndGame.cpp
 #include "scrabble.h"
 #include <climits>
 #include <iostream>
