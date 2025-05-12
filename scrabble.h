@@ -1,6 +1,9 @@
 //I changed The get_letter() method to correctly return char instead of int, as the letter itself is a char.
 //I fixed constructor for Player to accept a std::string for the player's name and an int for their points.
-//I think letter rack is missing: remove_letter, fill_rack, print_rack, and is_empty, so i added them
+//Compilors think letter rack is missing: remove_letter, fill_rack, print_rack, and is_empty, so i added them
+//Removed duplicate #include <string> to avoid redundancy.
+
+
 
 #ifndef SCRABBLE_H
 #define SCRABBLE_H
