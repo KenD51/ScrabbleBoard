@@ -1,5 +1,5 @@
 Game.cpp
-#include "Game.h"
+#include <"scrabble.h">
 #include <algorithm>
 #include <iostream>
 #include <fstream>
