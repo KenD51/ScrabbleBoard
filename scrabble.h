@@ -2,8 +2,7 @@
 //I fixed constructor for Player to accept a std::string for the player's name and an int for their points.
 //Compilors think letter rack is missing: remove_letter, fill_rack, print_rack, and is_empty, so i added them
 //Removed duplicate #include <string> to avoid redundancy.
-
-
+//Added game.h def
 
 #ifndef SCRABBLE_H
 #define SCRABBLE_H
@@ -15,6 +14,7 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <string>
 
 class LetterTile {
 private:
@@ -22,16 +22,14 @@ private:
     int point_value;
 public:
     LetterTile(char the_letter, int the_value) : letter(the_letter), point_value(the_value) {}
-    char get_letter() const { return letter; }
-    int get_point_value() const { return point_value; }
+    int get_letter() const;
+    int get_point_value() const;
 };
 
 class LetterBag {
 public:
     std::vector<LetterTile> Bag;
-
     LetterBag() {
-        // Initialize the letter bag with the standard Scrabble distribution
         addTiles('A', 9, 1);
         addTiles('B', 2, 3);
         addTiles('C', 2, 3);
@@ -60,7 +58,6 @@ public:
         addTiles('Z', 1, 10);
         addTiles('*', 2, 0); // Blank tiles
     }
-
     void addTiles(char letter, int count, int value);
     bool is_empty() const;
     LetterTile draw_tile();
@@ -77,83 +74,63 @@ public:
     bool is_empty();
 };
 
-// This is a tile structure that will be used in the Scrabble board.
+//This is a tile. Will merge later with scrabble board.
 struct Square {
     char letter = ' ';
 };
 
 class ScrabbleBoard {
 private:
-    std::vector<std::vector<Square>> board; // 2D Vector for board representation
-    static const int BOARD_SIZE = 15; // Scrabble board size (15x15)
+    std::vector<std::vector<Square>> board; //2D Vector
+    static const int BOARD_SIZE = 15; //Scrabble board has a length and width of 15 tiles. For error checking.
 public:
+    // Constructor to initialize the board
     ScrabbleBoard() : board(BOARD_SIZE, std::vector<Square>(BOARD_SIZE)) {}
 
     // Function to check if the given word placement is valid
     bool isValidPlacement(const std::string& word, int row, int col, char direction) const;
 
-    // Function to print the board
+    //Function to print the board
     void printBoard() const;
 
     // Function to place a word on the board (if placement is valid)
     bool placeWord(const std::string& word, int row, int col, char direction);
 };
 
+// Player Class
 class Player {
 private:
     std::string name;
     LetterRack rack;
     int order_number;
 public:
-    int points = 0;
-    
-    // Constructor: Initializes player with a name and points
-    Player(const std::string& the_name, int the_points) : name(the_name), points(the_points) {}
-
     int get_order_number() { return order_number; }
-
-    // Places word on board and calculates score
+    int points = 0;
+    Player(std::string the_name = "Player", int the_points = 0) : name(the_name), points(the_points) {}
     void play_word(ScrabbleBoard& board, const std::string& word, int row, int col, bool horizontal);
-
-    // Calculates score for a given word
     int calculate_score(const std::string& word);
-
-    // Getter for the player's rack
     LetterRack get_rack();
+    void set_name(const std::string& name);
+    std::string get_name() const;
+    int get_points() const;
 };
 
-class EndGame : public Player {
-private:
-    std::vector<std::string> winner;
-public:
-    // Computes final score considering the player's rack
-    void compute_final_score(LetterRack& rack);
-
-    // Determines the winner of the game
-    void determine_winner(Game& scrabble);
-};
-
+// Game Class
 class Game {
 private:
-    int pass_count = 0;
+    int pass_count;              // To track the number of consecutive passes
+    int playerNum;               // Number of players in the game
+    std::vector<Player> players; // Vector to hold players
+    ScrabbleBoard board;         // The Scrabble board
+    LetterBag bag;               // The letter bag for tile drawing
+
 public:
-    int playerNum;
-    std::vector<Player> players;
-    ScrabbleBoard board;
-    LetterBag bag;
-
-    // Getter for pass count
-    int get_pass_count() const { return pass_count; }
-
-    Game(); // Constructor
-
-    // Starts the game
-    void play_game();
-
-    // Determines the turn order of the players
-    void determine_turn_order();
+    Game();                      // Constructor to initialize the game
+    void play_game();             // Main game loop
+    int get_pass_count() const;   // Get the number of consecutive passes
+    void determine_winner();      // Method to determine the winner based on points
+    void determine_turn_order();  // Method to set up the turn order
 };
 
-#endif // SCRABBLE_H
-
+#endif
 
