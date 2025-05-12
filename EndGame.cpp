@@ -1,4 +1,4 @@
-#include<"EndGame.h">
+#include<"scrabble.h">
 #include <climits>
 #include <iostream>
 
