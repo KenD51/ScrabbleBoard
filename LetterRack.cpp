@@ -1,5 +1,5 @@
-
-#include "LetterRack.h"
+// LetterRack.cpp
+#include "scrabble.h"
 #include <iostream>
 
 // Removes a specific letter from the rack
