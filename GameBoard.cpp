@@ -1,4 +1,4 @@
-// gameboard.cpp
+// GameBoard.cpp
 // This cpp file contains the implementations of the Scrabble board class. It prints the board and allows words to be placed on the board, while also validating them.
 
 #include "scrabble.h"
