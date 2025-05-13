@@ -106,13 +106,14 @@ void Game::play_game() {
             if (is_valid_word(word)) {
                 // If the word is valid, play the word on the board and update the player's score
                 player.play_word(board, word);
+                pass_count = 0;
                 
                 // Check if the player passed their turn or played a valid word
                 if (word.empty()) {
                     pass_count++;  // Increase pass count if no word was played
-                    // End the game if there are 3 consecutive passes
-                    if (pass_count >= 3) {
-                        game_over = true;  // End the game after 3 passes
+                    // End the game if there are 6 consecutive passes
+                    if (pass_count >= 6) {
+                        game_over = true;  // End the game after 6 passes
                     }
                 }
             } else {
