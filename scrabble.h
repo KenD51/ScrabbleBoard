@@ -27,6 +27,23 @@ public:
     int get_point_value() const;
 };
 
+// Class representing the bag of letter tiles
+class LetterBag {
+public:
+    std::vector<LetterTile> Bag;  // Container holding all tiles
+    
+    LetterBag();  // Constructor initializes all tiles
+    
+    // Adds specified number of tiles to the bag
+    void addTiles(char letter, int count, int value);
+    
+    // Checks if the bag is empty
+    bool is_empty() const;
+    
+    // Randomly draws a tile from the bag
+    LetterTile draw_tile();
+};
+
 // Class representing a player's tile rack
 class LetterRack {
 private:
@@ -50,23 +67,6 @@ public:
     int get_tile_count() const;
 };
 
-// Class representing the bag of letter tiles
-class LetterBag {
-public:
-    std::vector<LetterTile> Bag;  // Container holding all tiles
-    
-    LetterBag();  // Constructor initializes all tiles
-    
-    // Adds specified number of tiles to the bag
-    void addTiles(char letter, int count, int value);
-    
-    // Checks if the bag is empty
-    bool is_empty() const;
-    
-    // Randomly draws a tile from the bag
-    LetterTile draw_tile();
-};
-
 // Structure representing a single board square
 struct Square {
     char letter = ' ';  // Default empty square
@@ -79,7 +79,7 @@ private:
     static const int BOARD_SIZE = 15;        // Standard Scrabble board size
     
 public:
-    ScrabbleBoard();  // Constructor initializes empty board
+    GameBoard();  // Constructor initializes empty board
     
     // Validates if a word can be placed at given position
     bool isValidPlacement(const std::string& word, int row, int col, char direction) const;
@@ -112,7 +112,7 @@ public:
     int get_points() const;
     
     // Plays a word on the board
-    void play_word(ScrabbleBoard& board, const std::string& word, int row, int col, bool horizontal);
+    void play_word(GameBoard& board, const std::string& word, int row, int col, bool horizontal);
     
     // Calculates score for a given word
     int calculate_score(const std::string& word);
@@ -136,7 +136,7 @@ private:
     int pass_count;              // Count of consecutive passes
     int playerNum;               // Number of players
     std::vector<Player> players; // List of players
-    ScrabbleBoard board;         // Game board
+    GameBoard board;         // Game board
     LetterBag bag;               // Tile bag
     int current_player_index;    // Index of current player
     
