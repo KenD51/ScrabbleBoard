@@ -1,8 +1,3 @@
-// main.cpp 
-// Group 1
-// CS 116
-// Spring 2025
-
 #include "scrabble.h"
 #include <iostream>
 #include <stdexcept>
