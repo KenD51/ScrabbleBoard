@@ -102,6 +102,22 @@ bool GameBoard::isValidPlacement(const vector<vector<Square>>& board, const stri
     return true;
 }
 
+// Function to check if word is part of the dictionary
+bool GameBoard::dictionaryCheck(const string& word) {
+   std::ifstream input_file(“words.txt”);
+    if (input_file.fail()) {
+        throw std::ios_base::failure(“Cannot open dictionary file.”);
+    }
+    while (!input_file.eof()) {
+        std::string word_check;
+        std::getline(input_file, word_check);
+        if (word != word_check) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Function to place a word on the board (if placement is valid)
 bool GameBoard::placeWord(vector<vector<Square>>& board, const string& word, int row, int col, char direction) {
     if (isValidPlacement(board, word, row, col, direction)) {
