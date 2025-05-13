@@ -25,6 +25,11 @@ void Player::play_word(ScrabbleBoard& board, const std::string& word,
     if (board.placeWord(word, row, col, horizontal)) {
         // If placement is valid, calculate the word's score and add it to player's points
         points += calculate_score(word);
+        // If placement is valid, remove the letters from the rack and replace them
+        for (int i = 0; i < word.length(); i++) {
+            char letter = word[i];
+            remove_letter(letter);
+        }
         
         // Check if player used all 7 letters in the word (a "Bingo" in Scrabble)
         if (word.length() == 7) {
