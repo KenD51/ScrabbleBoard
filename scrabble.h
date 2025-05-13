@@ -83,10 +83,7 @@ public:
     
     // Validates if a word can be placed at given position
     bool isValidPlacement(const std::string& word, int row, int col, char direction) const;
-
-    // Checks if the word is part of the dictionary
-    bool dictionaryCheck(const string& word);
-    
+ 
     // Prints the current board state
     void printBoard() const;
     
@@ -113,6 +110,9 @@ public:
     
     // Getter for current points
     int get_points() const;
+
+    // Checks if the word is part of the dictionary
+    bool dictionaryCheck(const string& word);
     
     // Plays a word on the board
     void play_word(ScrabbleBoard& board, const std::string& word, int row, int col, bool horizontal);
