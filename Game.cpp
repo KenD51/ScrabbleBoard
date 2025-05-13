@@ -103,7 +103,7 @@ void Game::play_game() {
             std::cin >> word;
 
             // Check if the word entered by the player is valid (implementation needed)
-            if (is_valid_word(word)) {
+            if (dictionaryCheck(word)) {
                 // If the word is valid, play the word on the board and update the player's score
                 player.play_word(board, word);
                 player.rack.fill_rack(bag);
