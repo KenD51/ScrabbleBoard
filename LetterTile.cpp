@@ -14,4 +14,3 @@ char LetterTile::get_letter() const {
 int LetterTile::get_point_value() const {
     return point_value;
 }
-
