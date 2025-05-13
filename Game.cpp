@@ -106,6 +106,7 @@ void Game::play_game() {
             if (is_valid_word(word)) {
                 // If the word is valid, play the word on the board and update the player's score
                 player.play_word(board, word);
+                player.rack.fill_rack(bag);
                 pass_count = 0;
                 
                 // Check if the player passed their turn or played a valid word
