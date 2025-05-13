@@ -110,9 +110,6 @@ public:
     
     // Getter for current points
     int get_points() const;
-
-    // Checks if the word is part of the dictionary
-    bool dictionaryCheck(const string& word);
     
     // Plays a word on the board
     void play_word(ScrabbleBoard& board, const std::string& word, int row, int col, bool horizontal);
@@ -155,6 +152,9 @@ public:
     
     // Determines and announces the winner
     void determine_winner();
+
+    // Checks if the word is part of the dictionary
+    bool dictionaryCheck(const string& word);
     
     // Establishes initial turn order
     void determine_turn_order();
