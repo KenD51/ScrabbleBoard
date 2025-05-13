@@ -154,7 +154,7 @@ public:
     void determine_winner();
 
     // Checks if the word is part of the dictionary
-    bool dictionaryCheck(const string& word);
+    bool dictionaryCheck(const std::string& word);
     
     // Establishes initial turn order
     void determine_turn_order();
