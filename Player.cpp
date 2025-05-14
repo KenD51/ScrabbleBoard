@@ -22,6 +22,11 @@ int Player::get_points() const {
     return points;
 }
 
+// Returns the name of the player
+string Player::get_name() const {
+    return name;
+}
+
 // Main function to allow a player to play a word on the board
 void Player::play_word(GameBoard& board, const std::string& word, int row, int col, char direction) {
     // Attempt to place the word on the board
