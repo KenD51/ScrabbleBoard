@@ -53,7 +53,7 @@ LetterBag::LetterBag() {
 void LetterBag::addTiles(char letter, int count, int value) {
     // Create and add the specified number of tiles
     for (int i = 0; i < count; ++i) {
-        letter_bag.emplace_back(letter, value);  // Constructs tile in-place
+        this->emplace_back(letter, value);  // Constructs tile in-place
     }
 }
 
@@ -61,7 +61,7 @@ void LetterBag::addTiles(char letter, int count, int value) {
 // Returns:
 //   true if no tiles remain, false otherwise
 bool LetterBag::is_empty() const {
-    return letter_bag.empty();  // Vector's empty() method
+    return this->empty();  // Vector's empty() method
 }
 
 // Draws a random tile from the bag
@@ -71,7 +71,7 @@ bool LetterBag::is_empty() const {
 //   std::runtime_error if bag is empty
 LetterTile LetterBag::draw_tile() {
     // Check for empty bag first
-    if (letter_bag.empty()) {
+    if (this->empty()) {
         throw std::runtime_error("Bag is empty");
     }
     
@@ -81,14 +81,14 @@ LetterTile LetterBag::draw_tile() {
     // Mersenne Twister engine for good distribution
     std::mt19937 gen(rd());  
     // Uniform distribution across possible indices
-    std::uniform_int_distribution<> dist(0, letter_bag.size() - 1);  
+    std::uniform_int_distribution<> dist(0, this->size() - 1);  
     
     // Select random tile
     int index = dist(gen);  // Generate random index
-    LetterTile tile = letter_bag[index];  // Copy the tile
+    LetterTile tile = this[index];  // Copy the tile
     
     // Remove tile from bag
-    letter_bag.erase(letter_bag.begin() + index);
+    this->erase(this->begin() + index);
     
     return tile;  // Return the drawn tile
 }
