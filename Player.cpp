@@ -22,9 +22,13 @@ int Player::get_points() const {
     return points;
 }
 
+// Returns the name of the player
+std::string Player::get_name() const {
+    return name;
+}
+
 // Main function to allow a player to play a word on the board
-void Player::play_word(GameBoard& board, const std::string& word, 
-                       int row, int col, char direction) {
+void Player::play_word(GameBoard& board, const std::string& word, int row, int col, char direction) {
     // Attempt to place the word on the board
     // placeWord returns true if the word placement is valid and successful
     if (board.placeWord(word, row, col, direction)) {
@@ -70,7 +74,7 @@ int Player::calculate_score(const std::string& word) {
             case 'K':
                 score += 5; // Letter worth 5 points
                 break;
-            case 'J': case 'x':
+            case 'J': case 'X':
                 score += 8; // Common letters worth 8 points
                 break;
             case 'Q': case 'Z':

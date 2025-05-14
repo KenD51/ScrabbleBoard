@@ -67,7 +67,7 @@ public:
     int get_tile_count() const;
     
     // Operator overloading to access a tile from a rack
-    LetterTile& operator[](int idx);
+    const LetterTile& operator[](int idx) const;
 
 };
 
@@ -89,13 +89,13 @@ public:
     std::vector<std::vector<Square>> initializeBoard();
     
     // Validates if a word can be placed at given position
-    bool isValidPlacement(const std::vector<std::vector<Square>>& board, const std::string& word, int row, int col, char direction);
+    bool isValidPlacement(const std::string& word, int row, int col, char direction);
  
     // Prints the current board state
-    void printBoard(const std::vector<std::vector<Square>>& board) const;
+    void printBoard() const;
     
     // Places a word on the board if valid
-    bool placeWord(std::vector<std::vector<Square>>&board, const std::string& word, int row, int col, char direction);
+    bool placeWord(const std::string& word, int row, int col, char direction);
 };
 
 // Class representing a player
@@ -119,16 +119,13 @@ public:
     int get_points() const;
     
     // Plays a word on the board
-    void play_word(GameBoard& board, const std::string& word, int row, int col, bool horizontal);
+    void play_word(GameBoard& board, const std::string& word, int row, int col, char direction);
     
     // Calculates score for a given word
     int calculate_score(const std::string& word);
     
     // Getter for the player's rack
     LetterRack get_rack() const;
-    
-    // Setter for player name
-    void set_name(const std::string& name);
     
     // Getter for player name
     std::string get_name() const;
@@ -152,13 +149,13 @@ public:
     Game();
     
     // Main game loop
-    void play_game(Game& scrabble);
+    void play_game();
     
     // Getter for pass count
     int get_pass_count() const;
 
     //Calculate the point value of the remaining tiles on the rack 
-    int rack_points(LetterRack& rack);
+    int rack_points(const LetterRack& rack);
     
     // Determines and announces the winner
     void determine_winner(Game& scrabble);
@@ -177,6 +174,8 @@ public:
     
     // Checks if game end conditions are met
     bool is_game_over() const;
+
+    void print_scores() const;
 };
 
 #endif // SCRABBLE_H

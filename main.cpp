@@ -18,7 +18,7 @@ int main() {
         std::cout << "========================================\n\n";
 
         Game scrabbleGame;
-        scrabbleGame.play_game(scrabbleGame);
+        scrabbleGame.play_game();
         
         std::cout << "\n========================================\n";
         std::cout << "   THANK YOU FOR PLAYING SCRABBLE!\n";

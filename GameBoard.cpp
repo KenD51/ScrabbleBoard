@@ -19,7 +19,7 @@ vector<vector<Square>> GameBoard::initializeBoard() {
 }
 
 // Function to print the Scrabble board
-void GameBoard::printBoard(const vector<vector<Square>>& board) const{
+void GameBoard::printBoard() const{
     //Creates the header and the column numbers
     cout << "   ";
     for (int j = 0; j < 15; ++j) {
@@ -54,7 +54,7 @@ void GameBoard::printBoard(const vector<vector<Square>>& board) const{
 }
 
 // Function to check if the given word is valid. Checks if the word placed goes off the board or if is not given a valid direction.
-bool GameBoard::isValidPlacement(const vector<vector<Square>>& board, const string& word, int row, int col, char direction) {
+bool GameBoard::isValidPlacement(const string& word, int row, int col, char direction) {
     int wordLength = word.length();
     int boardSize = 15;
 
@@ -104,8 +104,8 @@ bool GameBoard::isValidPlacement(const vector<vector<Square>>& board, const stri
 }
 
 // Function to place a word on the board (if placement is valid)
-bool GameBoard::placeWord(vector<vector<Square>>& board, const string& word, int row, int col, char direction) {
-    if (isValidPlacement(board, word, row, col, direction)) {
+bool GameBoard::placeWord(const string& word, int row, int col, char direction) {
+    if (isValidPlacement(word, row, col, direction)) {
         int wordLength = word.length();
         row--; // Adjusting to 0-based indexing
         col--; // Adjusting to 0-based indexing
