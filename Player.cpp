@@ -69,7 +69,7 @@ int Player::calculate_score(const std::string& word) {
             case 'K':
                 score += 5; // Letter worth 5 points
                 break;
-            case 'J': case 'x':
+            case 'J': case 'X':
                 score += 8; // Common letters worth 8 points
                 break;
             case 'Q': case 'Z':
