@@ -152,7 +152,7 @@ public:
     Game();
     
     // Main game loop
-    void play_game(Game& scrabble);
+    void play_game();
     
     // Getter for pass count
     int get_pass_count() const;
