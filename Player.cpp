@@ -33,7 +33,7 @@ void Player::play_word(GameBoard& board, const std::string& word,
         // If placement is valid, remove the letters from the rack and replace them
         for (int i = 0; i < word.length(); i++) {
             char letter = word[i];
-            remove_letter(letter);
+            player.rack.remove_letter(letter);
         }
         
         // Check if player used all 7 letters in the word (a "Bingo" in Scrabble)
@@ -50,7 +50,6 @@ void Player::play_word(GameBoard& board, const std::string& word,
 // Helper function to calculate Scrabble score of a word based on individual letters
 int Player::calculate_score(const std::string& word) {
     int score = 0;
-    
     // Loop through each character in the word
     for (char c : word) {
         // Add points based on standard Scrabble letter values
@@ -61,3 +60,6 @@ int Player::calculate_score(const std::string& word) {
                 break;
             case 'D': case 'G':
                 score += 2; // Slightly
+        }
+    }
+}
