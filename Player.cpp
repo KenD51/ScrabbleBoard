@@ -12,13 +12,18 @@ int Player::get_order_number() const {
     return order_number;
 }
 
+// Returns the player's rack
+LetterRack Player::get_rack() const {
+    return rack;
+}
+
 // Returns the current score (total points) of the player
 int Player::get_points() const {
     return points;
 }
 
 // Main function to allow a player to play a word on the board
-void Player::play_word(ScrabbleBoard& board, const std::string& word, 
+void Player::play_word(GameBoard& board, const std::string& word, 
                        int row, int col, bool horizontal) {
     // Attempt to place the word on the board
     // placeWord returns true if the word placement is valid and successful
@@ -28,7 +33,7 @@ void Player::play_word(ScrabbleBoard& board, const std::string& word,
         // If placement is valid, remove the letters from the rack and replace them
         for (int i = 0; i < word.length(); i++) {
             char letter = word[i];
-            remove_letter(letter);
+            rack.remove_letter(letter);
         }
         
         // Check if player used all 7 letters in the word (a "Bingo" in Scrabble)
@@ -45,7 +50,6 @@ void Player::play_word(ScrabbleBoard& board, const std::string& word,
 // Helper function to calculate Scrabble score of a word based on individual letters
 int Player::calculate_score(const std::string& word) {
     int score = 0;
-    
     // Loop through each character in the word
     for (char c : word) {
         // Add points based on standard Scrabble letter values
@@ -55,4 +59,26 @@ int Player::calculate_score(const std::string& word) {
                 score += 1; // Common letters worth 1 point
                 break;
             case 'D': case 'G':
-                score += 2; // Slightly
+                score += 2; // Common letters worth 2 points
+                break;
+            case 'B': case 'C': case 'M': case 'P':
+                score += 3; // Common letters worth 3 points
+                break;
+            case 'F': case 'H': case 'V': case 'W': case 'Y':
+                score += 4; // Common letters worth 4 points
+                break;
+            case 'K':
+                score += 5; // Letter worth 5 points
+                break;
+            case 'J': case 'x':
+                score += 8; // Common letters worth 8 points
+                break;
+            case 'Q': case 'Z':
+                score += 10; // Common letters worth 10 points
+                break;
+            default:
+                score += 0; break; // For blank tiles
+        }
+    }
+    return score;
+}

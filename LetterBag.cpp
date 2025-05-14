@@ -6,11 +6,12 @@
 #include <random>      // For random number generation
 #include <stdexcept>   // For exception handling
 
+std::vector<LetterTile> letter_bag;
+
 // Constructor: Initializes the bag with standard Scrabble tile distribution
 LetterBag::LetterBag() {
     // Initialize all tiles according to official Scrabble distribution:
     // Format: addTiles(letter, count, point_value)
-    
     // Vowels
     addTiles('A', 9, 1);  // 9 'A' tiles worth 1 point each
     addTiles('E', 12, 1); // Most common letter
