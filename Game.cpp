@@ -112,6 +112,7 @@ void Game::determine_winner(Game& scrabble) {
     for (auto& player : scrabble.players) {
         // Compute the player's final score: their total points minus the points of remaining tiles in their rack
         int final_score = player.get_points() - rack_points(player.get_rack());
+         print_scores();
 
         // If the current player's final score is higher than the highest score so far, update the highest score
         // and clear the list of winners to only include the current player
@@ -153,6 +154,8 @@ void Game::play_game(Game& scrabble) {
             // Display the player's rack of tiles
             player.get_rack().print_rack();
             
+            print_scores();
+            
             // Prompt the player for a word to play
             std::string word;
             std::cout << player.get_name() << ", it's your turn! Enter a word to play: ";
@@ -191,4 +194,12 @@ void Game::play_game(Game& scrabble) {
     }
     determine_winner(scrabble);
     return;
+}
+
+// Function to print the scores of all players
+void Game::print_scores() const {
+    std::cout << "Current Scores:" << std::endl;
+    for (const auto& player : players) {
+        std::cout << "Player " << player.get_order_number() << ": " << player.get_name() << " - " << player.get_points() << " points" << std::endl;
+    }
 }
