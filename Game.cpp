@@ -144,7 +144,7 @@ void Game::determine_winner(Game& scrabble) {
 }
 
 // Main game loop that controls the flow of the game, prompting players for actions and checking conditions.
-void Game::play_game() {
+void Game::play_game(Game& scrabble) {
     bool game_over = false;
 
     // Continue the game as long as it is not over
@@ -165,6 +165,7 @@ void Game::play_game() {
                 // Check if the rack and bag are empty (one of the game-over conditions)
                 if (player.rack.get_tile_count == 0 && bag.is_empty()) {
                     game_over = true;
+                    scrabble.determine_winner();
                 } else {
                     player.rack.fill_rack(bag);
                     pass_count = 0;
@@ -176,6 +177,7 @@ void Game::play_game() {
                     // End the game if there are 6 consecutive passes
                     if (pass_count >= 6) {
                         game_over = true;  // End the game after 6 passes
+                        scrabble.determine_winner();
                     }
                 }
             } else {
