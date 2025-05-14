@@ -89,10 +89,10 @@ public:
     std::vector<std::vector<Square>> initializeBoard();
     
     // Validates if a word can be placed at given position
-    bool isValidPlacement(const std::vector<std::vector<Square>>& board, const std::string& word, int row, int col, char direction);
+    bool isValidPlacement(const std::string& word, int row, int col, char direction);
  
     // Prints the current board state
-    void printBoard(const std::vector<std::vector<Square>>& board) const;
+    void printBoard() const;
     
     // Places a word on the board if valid
     bool placeWord(const std::string& word, int row, int col, char direction);
