@@ -5,7 +5,7 @@
 
 // Computes the final score of a player by subtracting the points of remaining tiles in their rack.
 // It takes the LetterRack of the player as input and returns the computed score after subtracting tile points.
-int EndGame::compute_final_score(LetterRack& rack) {
+int EndGame::rack_points(LetterRack& rack) {
     int total_tile_points = 0;  // Initialize variable to accumulate the total points of remaining tiles
 
     // Loop through each tile in the rack to sum up their points
@@ -24,7 +24,7 @@ void EndGame::determine_winner(Game& scrabble) {
     // Loop through each player to calculate their final score
     for (auto& player : scrabble.players) {
         // Compute the player's final score: their total points minus the points of remaining tiles in their rack
-        int final_score = player.get_points() - compute_final_score(player.rack);
+        int final_score = player.get_points() - rack_points(player.rack);
 
         // If the current player's final score is higher than the highest score so far, update the highest score
         // and clear the list of winners to only include the current player
@@ -44,7 +44,7 @@ void EndGame::determine_winner(Game& scrabble) {
     
     // Print each player's name along with their final score
     for (auto& player : scrabble.players) {
-        int final_score = player.get_points() - compute_final_score(player.rack);
+        int final_score = player.get_points() - rack_points(player.rack);
         std::cout << player.get_name() << ": " << final_score << " points" << std::endl;
     }
 
