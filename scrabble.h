@@ -141,17 +141,20 @@ private:
     int current_player_index;    // Index of current player
     
 public:
-    // Constructor with optional player count
-    Game(int num_players = 0);
+    // Constructor
+    Game();
     
     // Main game loop
-    void play_game();
+    void play_game(Game& scrabble);
     
     // Getter for pass count
     int get_pass_count() const;
+
+    //Calculate the point value of the remaining tiles on the rack 
+    int rack_points(LetterRack& rack);
     
     // Determines and announces the winner
-    void determine_winner();
+    void determine_winner(Game& scrabble);
 
     // Checks if the word is part of the dictionary
     bool dictionaryCheck(const std::string& word);
@@ -167,15 +170,6 @@ public:
     
     // Checks if game end conditions are met
     bool is_game_over() const;
-};
-
-class EndGame {
-public:
-    //Calculate the point value of the remaining tiles on the rack 
-    int rack_points(LetterRack& rack);
-    
-    // Determines the winner(s) of the game and displays the results.
-    void determine_winner(Game& scrabble);
 };
 
 #endif // SCRABBLE_H

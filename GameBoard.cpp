@@ -13,7 +13,7 @@ using namespace std;
 GameBoard::GameBoard() : board(BOARD_SIZE, std::vector<Square>(BOARD_SIZE)) {}
 
 // this is a 2D vector that creates the scrabble board that is 15 x 15
-Gameboard::vector<vector<Square>> initializeBoard() {
+GameBoard::vector<vector<Square>> initializeBoard() {
     return vector<vector<Square>>(15, vector<Square>(15));
 }
 
