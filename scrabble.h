@@ -17,6 +17,9 @@ private:
     int point_value;    // The point value of the tile
     
 public:
+    // Default Constructor
+    LetterTile();
+
     // Constructor to create a tile with specific letter and value
     LetterTile(char the_letter, int the_value);
     
