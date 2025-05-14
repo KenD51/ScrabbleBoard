@@ -23,7 +23,7 @@ int Player::get_points() const {
 }
 
 // Returns the name of the player
-string Player::get_name() const {
+std::string Player::get_name() const {
     return name;
 }
 
