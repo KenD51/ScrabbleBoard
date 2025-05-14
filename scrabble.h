@@ -177,6 +177,8 @@ public:
     
     // Checks if game end conditions are met
     bool is_game_over() const;
+
+    void print_scores() const;
 };
 
 #endif // SCRABBLE_H
