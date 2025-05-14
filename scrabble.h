@@ -65,6 +65,10 @@ public:
     
     // Returns the current number of tiles in rack
     int get_tile_count() const;
+    
+    // Operator overloading to access a tile from a rack
+    LetterTile& operator[](int idx);
+
 };
 
 // Structure representing a single board square
@@ -81,14 +85,17 @@ private:
 public:
     GameBoard();  // Constructor initializes empty board
     
+    // Creates Scrabble Board
+    std::vector<std::vector<Square>> initializeBoard();
+    
     // Validates if a word can be placed at given position
-    bool isValidPlacement(const std::string& word, int row, int col, char direction) const;
+    bool isValidPlacement(const std::vector<std::vector<Square>>& board, const std::string& word, int row, int col, char direction);
  
     // Prints the current board state
-    void printBoard() const;
+    void printBoard(const std::vector<std::vector<Square>>& board) const;
     
     // Places a word on the board if valid
-    bool placeWord(const std::string& word, int row, int col, char direction);
+    bool placeWord(std::vector<std::vector<Square>>&board, const std::string& word, int row, int col, char direction);
 };
 
 // Class representing a player

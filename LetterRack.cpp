@@ -67,3 +67,8 @@ void LetterRack::print_rack() const {
 int LetterRack::get_tile_count() const { 
     return tile_count; 
 }
+
+// Operator overloading to access an element from a player's rack
+LetterTile& LetterRack::operator[](int idx) {
+    return rack[idx];
+}
