@@ -125,7 +125,7 @@ public:
     int calculate_score(const std::string& word);
     
     // Getter for the player's rack
-    LetterRack& get_rack() const;
+    LetterRack get_rack() const;
     
     // Getter for player name
     std::string get_name() const;
