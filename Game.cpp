@@ -171,7 +171,6 @@ void Game::play_game(Game& scrabble) {
                 // Check if the rack and bag are empty (one of the game-over conditions)
                 if (player.get_rack().get_tile_count() == 0 && bag.is_empty()) {
                     game_over = true;
-                    determine_winner(scrabble);
                 } else {
                     player.get_rack().fill_rack(bag);
                     pass_count = 0;
@@ -182,8 +181,7 @@ void Game::play_game(Game& scrabble) {
                     pass_count++;  // Increase pass count if no word was played
                     // End the game if there are 6 consecutive passes
                     if (pass_count >= 6) {
-                        game_over = true;  // End the game after 6 passes
-                        determine_winner(scrabble);
+                        game_over = true;  // End the game after 6 passes in a row
                     }
                 }
             } else {
@@ -191,4 +189,6 @@ void Game::play_game(Game& scrabble) {
             }
         }
     }
+    determine_winner(scrabble);
+    return;
 }
