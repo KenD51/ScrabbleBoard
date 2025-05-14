@@ -23,7 +23,7 @@ int Player::get_points() const {
 }
 
 // Main function to allow a player to play a word on the board
-void Player::play_word(ScrabbleBoard& board, const std::string& word, 
+void Player::play_word(GameBoard& board, const std::string& word, 
                        int row, int col, bool horizontal) {
     // Attempt to place the word on the board
     // placeWord returns true if the word placement is valid and successful
