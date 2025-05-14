@@ -141,8 +141,8 @@ private:
     int current_player_index;    // Index of current player
     
 public:
-    // Constructor with optional player count
-    Game(int num_players = 0);
+    // Constructor
+    Game();
     
     // Main game loop
     void play_game(Game& scrabble);
