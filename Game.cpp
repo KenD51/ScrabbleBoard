@@ -22,11 +22,10 @@ Game::Game() : pass_count(0) {
     
     // Loop through each player and get their name. Create Player objects and set their names.
     for (int i = 0; i < playerNum; ++i) {
-        players.emplace_back();  // Add a new player to the players vector
         std::cout << "Enter name for player " << i + 1 << ": ";
         std::string name;
         std::cin >> name;  // Read player name
-        players[i].set_name(name);  // Set the name of the player
+        players.emplace_back(name, 0);  // Add a new player to the players vector
     }
 
     // Call function to determine the turn order based on drawn tiles.
