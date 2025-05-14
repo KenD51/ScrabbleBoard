@@ -67,7 +67,7 @@ public:
     int get_tile_count() const;
     
     // Operator overloading to access a tile from a rack
-    LetterTile& operator[](int idx);
+    const LetterTile& operator[](int idx) const;
 
 };
 
@@ -95,7 +95,7 @@ public:
     void printBoard(const std::vector<std::vector<Square>>& board) const;
     
     // Places a word on the board if valid
-    bool placeWord(std::vector<std::vector<Square>>&board, const std::string& word, int row, int col, char direction);
+    bool placeWord(const std::string& word, int row, int col, char direction);
 };
 
 // Class representing a player
