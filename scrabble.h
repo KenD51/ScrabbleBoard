@@ -154,7 +154,7 @@ public:
     int rack_points(LetterRack& rack);
     
     // Determines and announces the winner
-    void determine_winner();
+    void determine_winner(Game& scrabble);
 
     // Checks if the word is part of the dictionary
     bool dictionaryCheck(const std::string& word);
