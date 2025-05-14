@@ -151,7 +151,7 @@ void Game::play_game(Game& scrabble) {
     while (!game_over) {
         for (auto& player : players) {
             // Display the player's rack of tiles
-            player.rack.print_rack();
+            player.get_rack().print_rack();
             
             // Prompt the player for a word to play
             std::string word;

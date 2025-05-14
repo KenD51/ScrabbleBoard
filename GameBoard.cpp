@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <cctype> // For toupper
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -13,12 +14,12 @@ using namespace std;
 GameBoard::GameBoard() : board(BOARD_SIZE, std::vector<Square>(BOARD_SIZE)) {}
 
 // this is a 2D vector that creates the scrabble board that is 15 x 15
-GameBoard::vector<vector<Square>> initializeBoard() {
+vector<vector<Square>> GameBoard::initializeBoard() {
     return vector<vector<Square>>(15, vector<Square>(15));
 }
 
 // Function to print the Scrabble board
-void GameBoard::printBoard(const vector<vector<Square>>& board) {
+void GameBoard::printBoard(const vector<vector<Square>>& board) const{
     //Creates the header and the column numbers
     cout << "   ";
     for (int j = 0; j < 15; ++j) {
