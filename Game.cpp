@@ -104,7 +104,7 @@ int Game::rack_points(LetterRack& rack) {
 }
 
 // Determines the winner(s) of the game based on their final scores and displays the results.
-void Game::determine_winner() {
+void Game::determine_winner(Game& scrabble) {
     std::vector<std::string> winners;    // Vector to hold the names of the winners
     int highest_score = INT_MIN;         // Initialize the highest score to the smallest possible integer value
 
