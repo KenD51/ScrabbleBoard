@@ -191,7 +191,4 @@ void Game::play_game(Game& scrabble) {
             }
         }
     }
-
-    // Announce the winner after the game is over
-    determine_winner(scrabble);
 }
