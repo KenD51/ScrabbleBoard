@@ -119,7 +119,7 @@ public:
     int get_points() const;
     
     // Plays a word on the board
-    void play_word(GameBoard& board, const std::string& word, int row, int col, bool horizontal);
+    void play_word(GameBoard& board, const std::string& word, int row, int col, char direction);
     
     // Calculates score for a given word
     int calculate_score(const std::string& word);
