@@ -33,7 +33,7 @@ Game::Game() : pass_count(0) {
     
     // Fill each player's rack with tiles drawn from the bag
     for (auto& player : players) {
-        player.rack.fill_rack(bag);
+        player.get_rack().fill_rack(bag);
     }
 }
 // Determines the turn order of players by drawing unique tiles for each player
