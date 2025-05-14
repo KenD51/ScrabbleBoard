@@ -18,7 +18,7 @@ GameBoard::vector<vector<Square>> initializeBoard() {
 }
 
 // Function to print the Scrabble board
-void Gameboard::printBoard(const vector<vector<Square>>& board) {
+void GameBoard::printBoard(const vector<vector<Square>>& board) {
     //Creates the header and the column numbers
     cout << "   ";
     for (int j = 0; j < 15; ++j) {

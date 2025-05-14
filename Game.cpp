@@ -83,9 +83,9 @@ void Game::determine_turn_order() {
     // Sort players based on their first drawn tile in lexicographical order
     // Blank tiles ('*') come first, then tiles are sorted in A-Z order
     std::sort(players.begin(), players.end(), [](const Player& a, const Player& b) {
-        if (a.rack[0].get_letter() == '*') return true;  // Blank tile goes first
-        if (b.rack[0].get_letter() == '*') return false; // Blank tile goes first
-        return a.rack[0].get_letter() < b.rack[0].get_letter();  // Sort based on A-Z order
+        if (a.get_rack()[0].get_letter() == '*') return true;  // Blank tile goes first
+        if (b.get_rack()[0].get_letter() == '*') return false; // Blank tile goes first
+        return a.get_rack()[0].get_letter() < b.get_rack()[0].get_letter();  // Sort based on A-Z order
     });
 }
 
@@ -95,7 +95,7 @@ int Game::rack_points(LetterRack& rack) {
     int total_tile_points = 0;  // Initialize variable to accumulate the total points of remaining tiles
 
     // Loop through each tile in the rack to sum up their points
-    for (int i = 0; i < rack.SIZE; i++) {
+    for (int i = 0; i < rack.get_tile_count(); i++) {
         total_tile_points += rack[i].get_point_value();  // Add the point value of the tile to total
     }
 
@@ -111,7 +111,7 @@ void Game::determine_winner(Game& scrabble) {
     // Loop through each player to calculate their final score
     for (auto& player : scrabble.players) {
         // Compute the player's final score: their total points minus the points of remaining tiles in their rack
-        int final_score = player.get_points() - rack_points(player.rack);
+        int final_score = player.get_points() - rack_points(player.get_rack());
 
         // If the current player's final score is higher than the highest score so far, update the highest score
         // and clear the list of winners to only include the current player
@@ -131,7 +131,7 @@ void Game::determine_winner(Game& scrabble) {
     
     // Print each player's name along with their final score
     for (auto& player : scrabble.players) {
-        int final_score = player.get_points() - rack_points(player.rack);
+        int final_score = player.get_points() - rack_points(player.get_rack());
         std::cout << player.get_name() << ": " << final_score << " points" << std::endl;
     }
 
@@ -163,11 +163,11 @@ void Game::play_game(Game& scrabble) {
                 // If the word is valid, play the word on the board and update the player's score
                 player.play_word(board, word);
                 // Check if the rack and bag are empty (one of the game-over conditions)
-                if (player.rack.get_tile_count == 0 && bag.is_empty()) {
+                if (player.get_rack().get_tile_count() == 0 && bag.is_empty()) {
                     game_over = true;
-                    scrabble.determine_winner();
+                    determine_winner(scrabble);
                 } else {
-                    player.rack.fill_rack(bag);
+                    player.get_rack().fill_rack(bag);
                     pass_count = 0;
                 }
             
@@ -177,7 +177,7 @@ void Game::play_game(Game& scrabble) {
                     // End the game if there are 6 consecutive passes
                     if (pass_count >= 6) {
                         game_over = true;  // End the game after 6 passes
-                        scrabble.determine_winner();
+                        determine_winner(scrabble);
                     }
                 }
             } else {
@@ -186,6 +186,6 @@ void Game::play_game(Game& scrabble) {
         }
     }
 
-    // Announce the winner after the game is over (additional logic needed)
-    announce_winner();
+    // Announce the winner after the game is over
+    determine_winner(scrabble);
 }
