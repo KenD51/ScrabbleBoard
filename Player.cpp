@@ -59,7 +59,26 @@ int Player::calculate_score(const std::string& word) {
                 score += 1; // Common letters worth 1 point
                 break;
             case 'D': case 'G':
-                score += 2; // Slightly
+                score += 2; // Common letters worth 2 points
+                break;
+            case 'B': case 'C': case 'M': case 'P':
+                score += 3; // Common letters worth 3 points
+                break;
+            case 'F': case 'H': case 'V': case 'W': case 'Y':
+                score += 4; // Common letters worth 4 points
+                break;
+            case 'K':
+                score += 5; // Letter worth 5 points
+                break;
+            case 'J': case 'x':
+                score += 8; // Common letters worth 8 points
+                break;
+            case 'Q': case 'Z':
+                score += 10; // Common letters worth 10 points
+                break;
+            default:
+                score += 0; break; // For blank tiles
         }
     }
+    return score;
 }
