@@ -5,6 +5,7 @@
 #include <fstream>        // For file handling (e.g., saving/loading game state)
 #include <unordered_set>  // For efficient duplicate detection
 #include <cctype>         // For character operations like checking letter cases
+#include <climits>        // For using INT_MIN (minimum integer value)
 
 // Constructor for the Game class. It initializes the number of players, player names, 
 // determines the turn order, and fills each player's rack with tiles from the letter bag.
@@ -87,6 +88,61 @@ void Game::determine_turn_order() {
         return a.rack[0].get_letter() < b.rack[0].get_letter();  // Sort based on A-Z order
     });
 }
+
+// Computes the final score of a player by subtracting the points of remaining tiles in their rack.
+// It takes the LetterRack of the player as input and returns the computed score after subtracting tile points.
+int Game::rack_points(LetterRack& rack) {
+    int total_tile_points = 0;  // Initialize variable to accumulate the total points of remaining tiles
+
+    // Loop through each tile in the rack to sum up their points
+    for (int i = 0; i < rack.SIZE; i++) {
+        total_tile_points += rack[i].get_point_value();  // Add the point value of the tile to total
+    }
+
+    // Return the total points of remaining tiles in the player's rack
+    return total_tile_points;
+}
+
+// Determines the winner(s) of the game based on their final scores and displays the results.
+void Game::determine_winner() {
+    std::vector<std::string> winners;    // Vector to hold the names of the winners
+    int highest_score = INT_MIN;         // Initialize the highest score to the smallest possible integer value
+
+    // Loop through each player to calculate their final score
+    for (auto& player : scrabble.players) {
+        // Compute the player's final score: their total points minus the points of remaining tiles in their rack
+        int final_score = player.get_points() - rack_points(player.rack);
+
+        // If the current player's final score is higher than the highest score so far, update the highest score
+        // and clear the list of winners to only include the current player
+        if (final_score > highest_score) {
+            highest_score = final_score;
+            winners.clear();        // Clear previous winners
+            winners.push_back(player.get_name());  // Add the current player as the only winner
+        } 
+        // If the current player's final score equals the highest score, add them to the list of winners
+        else if (final_score == highest_score) {
+            winners.push_back(player.get_name());
+        }
+    }
+
+    // Display the end game results
+    std::cout << "\n=== Game Over ===" << std::endl;
+    
+    // Print each player's name along with their final score
+    for (auto& player : scrabble.players) {
+        int final_score = player.get_points() - rack_points(player.rack);
+        std::cout << player.get_name() << ": " << final_score << " points" << std::endl;
+    }
+
+    // Announce the winner(s)
+    std::cout << "\nWinner(s): ";
+    for (const auto& winner : winners) {
+        std::cout << winner << " ";   // Print all players with the highest score
+    }
+    std::cout << std::endl;  // Print newline at the end of the winner list
+}
+
 // Main game loop that controls the flow of the game, prompting players for actions and checking conditions.
 void Game::play_game() {
     bool game_over = false;
@@ -106,9 +162,14 @@ void Game::play_game() {
             if (dictionaryCheck(word)) {
                 // If the word is valid, play the word on the board and update the player's score
                 player.play_word(board, word);
-                player.rack.fill_rack(bag);
-                pass_count = 0;
-                
+                // Check if the rack and bag are empty (one of the game-over conditions)
+                if (player.rack.get_tile_count == 0 && bag.is_empty()) {
+                    game_over = true;
+                } else {
+                    player.rack.fill_rack(bag);
+                    pass_count = 0;
+                }
+            
                 // Check if the player passed their turn or played a valid word
                 if (word.empty()) {
                     pass_count++;  // Increase pass count if no word was played
@@ -119,11 +180,6 @@ void Game::play_game() {
                 }
             } else {
                 std::cout << "Invalid word. Try again." << std::endl;
-            }
-
-            // Check if the game is over (additional game-over condition implementation needed)
-            if (is_game_over()) {
-                game_over = true;
             }
         }
     }
