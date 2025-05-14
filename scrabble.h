@@ -127,9 +127,6 @@ public:
     // Getter for the player's rack
     LetterRack get_rack() const;
     
-    // Setter for player name
-    void set_name(const std::string& name);
-    
     // Getter for player name
     std::string get_name() const;
     
