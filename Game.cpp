@@ -91,7 +91,7 @@ void Game::determine_turn_order() {
 
 // Computes the final score of a player by subtracting the points of remaining tiles in their rack.
 // It takes the LetterRack of the player as input and returns the computed score after subtracting tile points.
-int Game::rack_points(const LetterRack& rack) const {
+int Game::rack_points(const LetterRack& rack) {
     int total_tile_points = 0;  // Initialize variable to accumulate the total points of remaining tiles
 
     // Loop through each tile in the rack to sum up their points
