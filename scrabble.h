@@ -158,7 +158,7 @@ public:
     int get_pass_count() const;
 
     //Calculate the point value of the remaining tiles on the rack 
-    int rack_points(LetterRack& rack);
+    int rack_points(const LetterRack& rack);
     
     // Determines and announces the winner
     void determine_winner(Game& scrabble);
