@@ -157,11 +157,17 @@ void Game::play_game(Game& scrabble) {
             std::string word;
             std::cout << player.get_name() << ", it's your turn! Enter a word to play: ";
             std::cin >> word;
-
+            
+            // Prompt the player for the location they want to place the word
+            std::int row, col;
+            std::char direction;
+            std::cout << "Enter the row, col, and direction of word placement: ";
+            std::cin >> row >> col >> direction;
+            
             // Check if the word entered by the player is valid (implementation needed)
             if (dictionaryCheck(word)) {
                 // If the word is valid, play the word on the board and update the player's score
-                player.play_word(board, word);
+                player.play_word(board, word, row, col, direction);
                 // Check if the rack and bag are empty (one of the game-over conditions)
                 if (player.get_rack().get_tile_count() == 0 && bag.is_empty()) {
                     game_over = true;
