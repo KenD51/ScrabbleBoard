@@ -159,8 +159,8 @@ void Game::play_game(Game& scrabble) {
             std::cin >> word;
             
             // Prompt the player for the location they want to place the word
-            std::int row, col;
-            std::char direction;
+            int row, col;
+            char direction;
             std::cout << "Enter the row, col, and direction of word placement: ";
             std::cin >> row >> col >> direction;
             
