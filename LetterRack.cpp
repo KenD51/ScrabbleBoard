@@ -6,7 +6,7 @@
 
 // Default Constructor
 // Initializes an empty rack with placeholder tiles
-LetterRack::LetterRack() {
+LetterRack::LetterRack(char letter, int point_value) {
     for (int i = 0; i < SIZE; ++i) {
         // Create empty tiles (space character with 0 points)
         rack[i] = LetterTile(' ', 0);
