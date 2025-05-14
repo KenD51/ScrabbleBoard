@@ -12,6 +12,11 @@ int Player::get_order_number() const {
     return order_number;
 }
 
+// Returns the player's rack
+LetterRack Player::get_rack() const {
+    return rack;
+}
+
 // Returns the current score (total points) of the player
 int Player::get_points() const {
     return points;
