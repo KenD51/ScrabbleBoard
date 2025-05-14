@@ -23,11 +23,10 @@ int Player::get_points() const {
 }
 
 // Main function to allow a player to play a word on the board
-void Player::play_word(GameBoard& board, const std::string& word, 
-                       int row, int col, char direction) {
+void Player::play_word(GameBoard& board, const std::string& word, int row, int col, char direction) {
     // Attempt to place the word on the board
     // placeWord returns true if the word placement is valid and successful
-    if (board.placeWord(word, row, col, direction)) {
+    if (board.placeWord(board, word, row, col, direction)) {
         // If placement is valid, calculate the word's score and add it to player's points
         points += calculate_score(word);
         // If placement is valid, remove the letters from the rack and replace them
