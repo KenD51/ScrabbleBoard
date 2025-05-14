@@ -13,7 +13,7 @@ int Player::get_order_number() const {
 }
 
 // Returns the player's rack
-LetterRack Player::get_rack() const {
+LetterRack& Player::get_rack() const {
     return rack;
 }
 
