@@ -145,7 +145,7 @@ public:
     Game(int num_players = 0);
     
     // Main game loop
-    void play_game();
+    void play_game(Game& scrabble);
     
     // Getter for pass count
     int get_pass_count() const;
