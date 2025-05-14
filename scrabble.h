@@ -169,4 +169,13 @@ public:
     bool is_game_over() const;
 };
 
+class EndGame {
+public:
+    //Calculate the point value of the remaining tiles on the rack 
+    int rack_points(LetterRack& rack);
+    
+    // Determines the winner(s) of the game and displays the results.
+    void determine_winner(Game& scrabble);
+};
+
 #endif // SCRABBLE_H
