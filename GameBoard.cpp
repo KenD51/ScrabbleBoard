@@ -105,7 +105,7 @@ bool GameBoard::isValidPlacement(const string& word, int row, int col, char dire
 
 // Function to place a word on the board (if placement is valid)
 bool GameBoard::placeWord(const string& word, int row, int col, char direction) {
-    if (isValidPlacement(board, word, row, col, direction)) {
+    if (isValidPlacement(word, row, col, direction)) {
         int wordLength = word.length();
         row--; // Adjusting to 0-based indexing
         col--; // Adjusting to 0-based indexing
