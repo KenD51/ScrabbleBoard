@@ -7,7 +7,7 @@
 #include <cctype>         // For character operations like checking letter cases
 #include <climits>        // For using INT_MIN (minimum integer value)
 
-// Constructor for the Game class. It initializes the number of players, player names, 
+// Constructor for the Game class. It initializes the number of players, player names,
 // determines the turn order, and fills each player's rack with tiles from the letter bag.
 Game::Game() : pass_count(0) {
     // Ask the user for the number of players (between 2 and 4 players are allowed)
@@ -52,7 +52,7 @@ void Game::determine_turn_order() {
                 LetterTile tile = bag.draw_tile();  // Draw a tile from the bag
                 drawn_tiles.push_back(tile.get_letter());  // Store the letter of the tile
             } else {
-                drawn_tiles.push_back('');  // Use '' for a blank tile if the bag is empty
+                drawn_tiles.push_back('*');  // Use '' for a blank tile if the bag is empty
             }
         }
 
@@ -91,7 +91,7 @@ void Game::determine_turn_order() {
 
 // Computes the final score of a player by subtracting the points of remaining tiles in their rack.
 // It takes the LetterRack of the player as input and returns the computed score after subtracting tile points.
-int Game::rack_points(LetterRack& rack) {
+int Game::rack_points(const LetterRack& rack) const {
     int total_tile_points = 0;  // Initialize variable to accumulate the total points of remaining tiles
 
     // Loop through each tile in the rack to sum up their points
@@ -120,7 +120,7 @@ void Game::determine_winner(Game& scrabble) {
             highest_score = final_score;
             winners.clear();        // Clear previous winners
             winners.push_back(player.get_name());  // Add the current player as the only winner
-        } 
+        }
         // If the current player's final score equals the highest score, add them to the list of winners
         else if (final_score == highest_score) {
             winners.push_back(player.get_name());
@@ -145,7 +145,8 @@ void Game::determine_winner(Game& scrabble) {
 }
 
 // Main game loop that controls the flow of the game, prompting players for actions and checking conditions.
-void Game::play_game(Game& scrabble) {
+void Game::play_game() {
+
     bool game_over = false;
 
     // Continue the game as long as it is not over
@@ -192,7 +193,7 @@ void Game::play_game(Game& scrabble) {
             }
         }
     }
-    determine_winner(scrabble);
+    determine_winner(*this);
     return;
 }
 
