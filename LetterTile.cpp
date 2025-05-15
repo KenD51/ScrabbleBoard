@@ -1,9 +1,6 @@
 // LetterTile.cpp
 #include "scrabble.h"
 
-// Default Constructor
-LetterTile::LetterTile() {}
-
 // Constructor: Initializes a letter tile with given letter and point value
 LetterTile::LetterTile(char the_letter, int the_value) 
     : letter(the_letter), point_value(the_value) {}
