@@ -8,7 +8,6 @@
 #include <sstream>       
 #include <string>         // For string operations
 #include <cstring>        // For handling C-style strings
-#include <direct.h>       // For _getcwd on Windows
 
 //I added a lot of debugging output as there was a lot of things to test.
 
