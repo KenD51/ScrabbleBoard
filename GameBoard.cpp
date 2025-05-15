@@ -96,7 +96,6 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
     } else {
         // Logic for validating subsequent word placements (must connect to existing words)
         bool connects = false;
-        bool usesExisting = false;
         for (int i = 0; i < wordLength; ++i) {
             //Get Coordinates
             int r = row + (direction == 'V' ? i : 0);
@@ -105,21 +104,16 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
             // If overlapping a letter, it must match
             if (boardLetter != ' ' && boardLetter != '*') {
                 if (boardLetter == toupper(word[i])) {
-                    usesExisting = true;
+                    // No longer needed
                 } else {
                     std::cout << "Debug: Overlapping, different letter at position (" << r + 1 << ", " << c + 1 << ")." << std::endl;
                     return false;
                 }
             }
             //This block checks whether at least one tile in the word being placed is adjacent to an already placed letter, 
-            //Check later
             // Check if the current letter's position has an adjacent existing letter
-            // Arrays representing the four possible adjacent directions: up, down, left, right
             int dr[] = {-1, 1, 0, 0}; // Row offsets: -1 = up, +1 = down, 0 = same row
             int dc[] = {0, 0, -1, 1};  // Column offsets: 0 = same column, -1 = left, +1 = right
-            // Check all four adjacent tiles for a connection to an existing letter
-        // Ensure the new indices are within the bounds of the board,
-         // and check if the adjacent tile has a letter on it
             for (int j = 0; j < 4; ++j) {
                 int nr = r + dr[j];
                 int nc = c + dc[j];
@@ -132,10 +126,6 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
         }
         if (!connects) {
             cout << "Debug (isValidPlacement): Subsequent word does not connect to existing letters." << endl;
-            return false;
-        }
-        if (!usesExisting) {
-            std::cout << "Debug: Word must connect to an existing letter." << std::endl;
             return false;
         }
         cout << "Debug (isValidPlacement): Placement is valid." << endl;
