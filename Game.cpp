@@ -6,6 +6,8 @@
 #include <unordered_set>  // For efficient duplicate detection
 #include <cctype>         // For character operations like checking letter cases
 #include <climits>        // For using INT_MIN (minimum integer value)
+#include <string>
+#include <stdexcept>
 
 // Constructor for the Game class. It initializes the number of players, player names,
 // determines the turn order, and fills each player's rack with tiles from the letter bag.
@@ -145,9 +147,9 @@ void Game::determine_winner(Game& scrabble) {
 
 // Check if the word is in the dictionary
 bool Game::dictionaryCheck(const std::string& word) {
-    std::ifstream input_file(“words.txt”);
+    std::ifstream input_file("words.txt");
     if (input_file.fail()) {
-        throw std::ios_base::failure(“Cannot open dictionary file.”);
+        throw std::ios_base::failure("Cannot open dictionary file.");
     }
     while (!input_file.eof()) {
         std::string word_check;
