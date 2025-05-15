@@ -98,21 +98,28 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
         bool connects = false;
         bool usesExisting = false;
         for (int i = 0; i < wordLength; ++i) {
+            //Get Coordinates
             int r = row + (direction == 'V' ? i : 0);
             int c = col + (direction == 'H' ? i : 0);
-            char boardLetter = board[r][c].letter;
+            char boardLetter = board[r][c].letter; //Get Letter
             // If overlapping a letter, it must match
             if (boardLetter != ' ' && boardLetter != '*') {
                 if (boardLetter == toupper(word[i])) {
                     usesExisting = true;
                 } else {
-                    std::cout << "Debug: Overlap with a different letter at position (" << r + 1 << ", " << c + 1 << ")." << std::endl;
+                    std::cout << "Debug: Overlapping, different letter at position (" << r + 1 << ", " << c + 1 << ")." << std::endl;
                     return false;
                 }
             }
+            //This block checks whether at least one tile in the word being placed is adjacent to an already placed letter, 
+            //Check later
             // Check if the current letter's position has an adjacent existing letter
-            int dr[] = {-1, 1, 0, 0}; // Possible row offsets (up, down, same, same)
-            int dc[] = {0, 0, -1, 1}; // Possible column offsets (same, same, left, right)
+            // Arrays representing the four possible adjacent directions: up, down, left, right
+            int dr[] = {-1, 1, 0, 0}; // Row offsets: -1 = up, +1 = down, 0 = same row
+            int dc[] = {0, 0, -1, 1};  // Column offsets: 0 = same column, -1 = left, +1 = right
+            // Check all four adjacent tiles for a connection to an existing letter
+        // Ensure the new indices are within the bounds of the board,
+         // and check if the adjacent tile has a letter on it
             for (int j = 0; j < 4; ++j) {
                 int nr = r + dr[j];
                 int nc = c + dc[j];
