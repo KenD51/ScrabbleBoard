@@ -1,7 +1,6 @@
 #ifndef SCRABBLE_H
 #define SCRABBLE_H
 
-// Include necessary standard library headers
 #include <vector>       // For vector container
 #include <algorithm>    // For sorting algorithms
 #include <random>       // For random number generation
@@ -10,6 +9,12 @@
 #include <string>       // For string handling
 #include <cstdlib>      // For general utilities
 
+// Forward declare LetterBag to avoid circular dependency
+class LetterBag;
+
+// Forward declare GameBoard to avoid circular dependency
+class GameBoard;
+
 // Class representing a single Scrabble tile
 class LetterTile {
 private:
@@ -17,8 +22,8 @@ private:
     int point_value;    // The point value of the tile
     
 public:
-    // Default Constructor
-    LetterTile();
+    // Default constructor
+    LetterTile() : letter(' '), point_value(0) {}
 
     // Constructor to create a tile with specific letter and value
     LetterTile(char the_letter, int the_value);
@@ -30,31 +35,13 @@ public:
     int get_point_value() const;
 };
 
-// Class representing the bag of letter tiles
-class LetterBag {
-public:
-    std::vector<LetterTile> Bag;  // Container holding all tiles
-    
-    LetterBag();  // Constructor initializes all tiles
-    
-    // Adds specified number of tiles to the bag
-    void addTiles(char letter, int count, int value);
-    
-    // Checks if the bag is empty
-    bool is_empty() const;
-    
-    // Randomly draws a tile from the bag
-    LetterTile draw_tile();
-};
-
 // Class representing a player's tile rack
 class LetterRack {
-private:
-    static const int SIZE = 7;  // Maximum tiles in rack
-    LetterTile rack[SIZE];      // Array holding the tiles
-    int tile_count = 0;         // Current number of tiles in rack
-    
 public:
+    static const int SIZE = 7;  // Made SIZE public for accessibility
+    LetterTile rack[SIZE];      // Made rack public for accessibility
+    int tile_count = 0;         // Made tile_count public for accessibility
+
     LetterRack();  // Default constructor
     
     // Removes a specific letter tile from the rack
@@ -68,10 +55,27 @@ public:
     
     // Returns the current number of tiles in rack
     int get_tile_count() const;
-    
-    // Operator overloading to access a tile from a rack
-    const LetterTile& operator[](int idx) const;
 
+    // Access operator for tiles in the rack
+    LetterTile& operator[](int index);
+    const LetterTile& operator[](int index) const;
+};
+
+// Class representing the tile bag
+class LetterBag {
+public:
+    std::vector<LetterTile> Bag;  // Container holding all tiles
+
+    LetterBag();  // Constructor initializes all tiles
+
+    // Adds specified number of tiles to the bag
+    void addTiles(char letter, int count, int value);
+
+    // Checks if the bag is empty
+    bool is_empty() const;
+
+    // Randomly draws a tile from the bag
+    LetterTile draw_tile();
 };
 
 // Structure representing a single board square
@@ -88,83 +92,84 @@ private:
 public:
     GameBoard();  // Constructor initializes empty board
     
-    // Creates Scrabble Board
-    std::vector<std::vector<Square>> initializeBoard();
-    
     // Validates if a word can be placed at given position
-    bool isValidPlacement(const std::string& word, int row, int col, char direction);
- 
+    bool isValidPlacement(const std::string& word, int row, int col, char direction) const;
+    
     // Prints the current board state
     void printBoard() const;
     
     // Places a word on the board if valid
     bool placeWord(const std::string& word, int row, int col, char direction);
+
+    // Initializes the board
+    std::vector<std::vector<Square>> initializeBoard();
 };
 
 // Class representing a player
 class Player {
 private:
     std::string name;        // Player's name
-    LetterRack rack;         // Player's tile rack
     int order_number;        // Player's turn order
     int points;              // Player's current score
-    
+
 public:
-    Player();  // Default constructor
-    
-    // Constructor with optional name and starting points
-    Player(std::string the_name = "Player", int the_points = 0);
-    
+    LetterRack rack;         // Player's tile rack (moved to public for accessibility)
+
+    Player() : name("Player"), points(0), order_number(0) {}  // Explicit default constructor
+    Player(std::string the_name, int the_points = 0) : name(the_name), points(the_points), order_number(0) {}  // Parameterized constructor
+
     // Getter for turn order
     int get_order_number() const;
-    
+
     // Getter for current points
     int get_points() const;
-    
+
     // Plays a word on the board
-    void play_word(GameBoard& board, const std::string& word, int row, int col, char direction);
-    
+    bool play_word(GameBoard& board, const std::string& word, int row, int col, bool horizontal);
+
     // Calculates score for a given word
     int calculate_score(const std::string& word);
-    
+
     // Getter for the player's rack
     LetterRack get_rack() const;
-    
+
+    // Setter for player name
+    void set_name(const std::string& name);
+
     // Getter for player name
     std::string get_name() const;
-    
+
     // Setter for turn order
     void set_order_number(int order);
+
+    // Adds points to the player's score
+    void add_points(int additional_points);
 };
 
 // Class representing the game controller
 class Game {
+public:
+    std::vector<Player> players; // Made players public for accessibility
+
 private:
     int pass_count;              // Count of consecutive passes
     int playerNum;               // Number of players
-    std::vector<Player> players; // List of players
-    GameBoard board;         // Game board
+    GameBoard board;             // Game board
     LetterBag bag;               // Tile bag
     int current_player_index;    // Index of current player
     
 public:
-    // Constructor
-    Game();
+    // Constructor with optional player count
+    Game(int num_players = 0);
     
     // Main game loop
     void play_game();
     
     // Getter for pass count
     int get_pass_count() const;
-
-    //Calculate the point value of the remaining tiles on the rack 
-    int rack_points(const LetterRack& rack);
     
     // Determines and announces the winner
-    void determine_winner(Game& scrabble);
-
-    // Checks if the word is part of the dictionary
-    bool dictionaryCheck(const std::string& word);
+    void determine_winner();
     
     // Establishes initial turn order
     void determine_turn_order();
@@ -178,7 +183,27 @@ public:
     // Checks if game end conditions are met
     bool is_game_over() const;
 
+     // Checks if the word is part of the dictionary
+    bool dictionaryCheck(const std::string& word);
+    
+
+    // Validates if a word is valid
+    bool is_valid_word(const std::string& word);
+
+    // Announces the winner of the game
+    void announce_winner();
+
     void print_scores() const;
+};
+
+// Added EndGame class declaration
+class EndGame {
+public:
+    // Computes the final score for a player based on their remaining tiles
+    int compute_final_score(LetterRack& rack);
+
+    // Determines the winner of the game
+    void determine_winner(Game& scrabble);
 };
 
 #endif // SCRABBLE_H
