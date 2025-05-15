@@ -19,7 +19,7 @@ int main() {
         std::cout << "2. Subsequent words must connect to existing words\n";
         std::cout << "3. Blank tiles (*) can represent any letter\n";
         std::cout << "4. Using all 7 tiles earns a 50-point bonus\n";
-        std::cout << "5. '*' are blank tiles that can represent any letter\n";
+        std::cout << "5. '?' are blank tiles that can represent any letter\n";
         std::cout << "6. Game ends when:\n";
         std::cout << "   - A player uses all tiles and the bag is empty\n";
         std::cout << "   - Six consecutive passes occur\n";
