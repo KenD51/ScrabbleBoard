@@ -1,6 +1,12 @@
+// main.cpp 
+// Group 1
+// CS 116
+// Spring 2025
+
 #include "scrabble.h"
 #include <iostream>
 #include <stdexcept>
+#include <limits>
 
 int main() {
     try {
@@ -12,12 +18,25 @@ int main() {
         std::cout << "2. Subsequent words must connect to existing words\n";
         std::cout << "3. Blank tiles (*) can represent any letter\n";
         std::cout << "4. Using all 7 tiles earns a 50-point bonus\n";
-        std::cout << "5. Game ends when:\n";
+        std::cout << "5. '*' are blank tiles that can represent any letter\n";
+        std::cout << "6. Game ends when:\n";
         std::cout << "   - A player uses all tiles and the bag is empty\n";
         std::cout << "   - Six consecutive passes occur\n";
         std::cout << "========================================\n\n";
 
-        Game scrabbleGame;
+        int num_players;
+        do {
+            std::cin.clear(); // Clear any error flags
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+            std::cout << "Enter the number of players (2-4): ";
+            std::cin >> num_players;
+
+            if (std::cin.fail() || num_players < 2 || num_players > 4) {
+                std::cout << "Invalid input. Please enter a number between 2 and 4." << std::endl;
+            }
+        } while (std::cin.fail() || num_players < 2 || num_players > 4);
+
+        Game scrabbleGame(num_players); // Pass the user input to the Game constructor
         scrabbleGame.play_game();
         
         std::cout << "\n========================================\n";
@@ -28,6 +47,8 @@ int main() {
     } 
     catch (const std::exception& e) {
         std::cerr << "\nERROR: " << e.what() << std::endl;
+        std::cerr << "An exception occurred during the game initialization or execution." << std::endl;
+        std::cerr << "Exception message: " << e.what() << std::endl;
         std::cerr << "The game has ended unexpectedly.\n";
         return 1;
     }
