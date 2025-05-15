@@ -147,18 +147,18 @@ void Game::determine_winner(Game& scrabble) {
 
 // Check if the word is in the dictionary
 bool Game::dictionaryCheck(const std::string& word) {
-    std::ifstream input_file("words.txt");
+    std::ifstream input_file("words");
     if (input_file.fail()) {
         throw std::ios_base::failure("Cannot open dictionary file.");
     }
     while (!input_file.eof()) {
         std::string word_check;
         std::getline(input_file, word_check);
-        if (word != word_check) {
-            return false;
+        if (word == word_check) {
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 // Main game loop that controls the flow of the game, prompting players for actions and checking conditions.
