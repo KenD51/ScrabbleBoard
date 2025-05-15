@@ -200,7 +200,7 @@ public:
 class EndGame {
 public:
     // Computes the final score for a player based on their remaining tiles
-    int compute_final_score(LetterRack& rack);
+    int rack_points(LetterRack& rack);
 
     // Determines the winner of the game
     void determine_winner(Game& scrabble);
