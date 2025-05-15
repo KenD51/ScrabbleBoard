@@ -1,4 +1,4 @@
-// Game.cpp
+//I added a lot of debugging output as there was a lot of things to test.
 #include "scrabble.h"     // Include the header file that defines all the classes and methods used
 #include <algorithm>      // For std::sort to sort players based on the drawn tiles
 #include <iostream>       // For input and output, e.g., displaying prompts and results
@@ -8,10 +8,8 @@
 #include <sstream>       
 #include <string>         // For string operations
 #include <cstring>        // For handling C-style strings
-
-//I added a lot of debugging output as there was a lot of things to test.
-
 // Added debugging output to input validation loop in Game constructor. 
+
 Game::Game(int num_players) : pass_count(0), playerNum(num_players), current_player_index(0) {
     std::cout << "Initializing game with " << playerNum << " players." << std::endl;
     while (playerNum < 2 || playerNum > 4) {
@@ -122,25 +120,11 @@ void Game::play_game() {
                 std::cout << "\nCurrent Board State:" << std::endl;
                 board.printBoard();
 
-                // Inform user about the center position
-                std::cout << "Note: The center star is at row 7, column 7." << std::endl;
-
-                std::string input_line;
-                std::cout << "Enter word, row, column, and direction (H/V): ";
-                std::getline(std::cin >> std::ws, input_line); // Read the whole line
-
-                std::istringstream iss(input_line);
                 std::string word;
                 int row, col;
                 char direction;
-                if (!(iss >> word >> row >> col >> direction)) {
-                    std::cout << "Invalid input format. Please try again." << std::endl;
-                    continue;
-                }
-
-                // Convert row and col to 0-based indices
-                row -= 1;
-                col -= 1;
+                std::cout << "Enter word, row, column, and direction (H/V): ";
+                std::cin >> word >> row >> col >> direction;
 
                 // Convert word to uppercase for consistency
                 std::transform(word.begin(), word.end(), word.begin(), ::toupper);
@@ -148,15 +132,24 @@ void Game::play_game() {
                 // Dictionary check
                 if (!dictionaryCheck(word)) {
                     std::cout << "Word not found in dictionary. Try again." << std::endl;
+                    // Clear the rest of the line to avoid input issues
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     continue;
                 }
 
-                // Validate placement
+                // Clear the rest of the line to avoid leftover input
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                // Do NOT convert row and col to 0-based indices here! This is super important!!!!
+                // Pass user input (1-based) directly to isValidPlacement
                 bool horizontal = (direction == 'H' || direction == 'h');
                 if (!board.isValidPlacement(word, row, col, horizontal ? 'H' : 'V')) {
                     std::cout << "Invalid placement. Please try again." << std::endl;
                     continue;
                 }
+
+                // Do NOT convert row and col to 0-based indices here for play_word either!
+                // The play_word and GameBoard::placeWord logic expects 1-based indices for the first word.
 
                 // Try to play the word
                 if (player.play_word(board, word, row, col, horizontal)) {
@@ -205,20 +198,30 @@ static std::string trim(const std::string& s) {
 
  // Checks if the word is part of the dictionary
 bool Game::dictionaryCheck(const std::string& word) {
-    std::ifstream input_file("words");
+    // Try both "words.txt" and "words" for compatibility
+    std::ifstream input_file("words.txt");
     if (input_file.fail()) {
+        input_file.clear();
+        input_file.open("words");
+    }
+    if (input_file.fail()) {
+        std::cerr << "[DEBUG] Cannot open 'words'." << std::endl;
         throw std::ios_base::failure("Cannot open dictionary file.");
     }
-    while (!input_file.eof()) {
-        std::string word_check;
-        std::getline(input_file, word_check);
-        if (word == word_check) {
+    std::string word_upper = word;
+    std::transform(word_upper.begin(), word_upper.end(), word_upper.begin(), ::toupper);
+
+    std::string word_check;
+    while (std::getline(input_file, word_check)) {
+        // Remove whitespace and convert to uppercase for comparison
+        word_check.erase(word_check.find_last_not_of(" \n\r\t") + 1);
+        std::transform(word_check.begin(), word_check.end(), word_check.begin(), ::toupper);
+        if (word_upper == word_check) {
             return true;
         }
     }
     return false;
 }
-
 
 // Added definitions for is_valid_word and announce_winner becuse they didn't exist apparently.
 bool Game::is_valid_word(const std::string& word) {
