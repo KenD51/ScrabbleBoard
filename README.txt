@@ -2,12 +2,12 @@ Group 1: Kenshin Drona, Shanni Lian, Le Hoang Anh Nguyen, Nicole Wu, and Naga Ha
 Compiler: Clang
 
 Compilation Instructions:
-1. Create a new folder on your desktop called "Final Project"
+1. Create a new folder called "Final Project"
 2. Download our zip folder called "scrabble.zip"
 3. Right click the zipped file and extract all
-4. Save the extracted files in a new folder called "Final Project"
+4. Save the extracted files in the new folder called "Final Project"
 5. Open the Clang terminal
-6. Change the directory to whereever the "Final Project" folder is stored
+6. Change the directory to whereever the "Final Project" folder is located
    a. Typing ls shows you the contents of your current directory
    b. Typing pwd shows you where you are
    c. Typing cd ______ changes your directory to the one you specificed
