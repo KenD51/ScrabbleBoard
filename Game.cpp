@@ -36,7 +36,7 @@ Game::Game(int num_players) : pass_count(0), playerNum(num_players), current_pla
     std::cout << "Initial LetterBag size: " << bag.Bag.size() << std::endl;
 
     // Fill racks
-    for (auto& Player : players) {
+    for (auto& player : players) {
         player.rack.fill_rack(bag);
         std::cout << "Rack for player " << player.get_name() << " filled with " << player.rack.get_tile_count() << " tiles." << std::endl;
     }
