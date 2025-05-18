@@ -134,10 +134,6 @@ void Game::play_game() {
                     std::cout << "Please enter your number selection (1, 2, or 3): ";
                     std::cin >> selection;
 
-<<<<<<< HEAD
-=======
-                    //I added this
->>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                     // Handle non-integer input and invalid selections
                     while (std::cin.fail() || (selection != 1 && selection != 2 && selection != 3)) {
                         std::cin.clear(); // Clear error state
@@ -178,12 +174,10 @@ void Game::play_game() {
                         // Dictionary check
                         if (!dictionaryCheck(word)) {
                             std::cout << "Word not found in dictionary. Try again." << std::endl;
-                            // Clear the rest of the line to avoid input issues
                             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                             continue;
                         }
 
-                        // Clear the rest of the line to avoid leftover input
                         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
                         bool horizontal = (direction == 'H' || direction == 'h');
@@ -192,15 +186,11 @@ void Game::play_game() {
                             continue;
                         }
 
-<<<<<<< HEAD
-                        // Fix: Remove stray function signature and use correct call
                         if (!board.allAdjacentWordsValid(word, row, col, horizontal, *this)) {
                             std::cout << "Invalid move: All words formed (including adjacent) must be valid dictionary words." << std::endl;
                             continue;
                         }
 
-=======
->>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                         // Only remove letters from rack that are actually placed (not already on board)
                         std::vector<char> letters_to_remove;
                         int r = row - 1;
@@ -209,13 +199,10 @@ void Game::play_game() {
                         for (size_t idx = 0; idx < word.size(); ++idx) {
                             int cur_r = r + (horizontal ? 0 : idx);
                             int cur_c = c + (horizontal ? idx : 0);
-                            // Use a public getter for board tiles
                             char board_letter = board.getTile(cur_r, cur_c);
-                            // Compare case-insensitively and skip if board already has the letter
                             if (std::toupper(board_letter) == word[idx]) {
                                 continue;
                             }
-                            // Otherwise, must use rack letter
                             if (!players[i].rack.has_letter(word[idx])) {
                                 std::cout << "You do not have the letter '" << word[idx] << "' in your rack and it's not on the board at this position. Try again.\n";
                                 can_place = false;
@@ -226,17 +213,13 @@ void Game::play_game() {
                         if (!can_place) {
                             continue;
                         }
-                        // Try to play the word
-<<<<<<< HEAD
                         bool play_success = players[i].play_word(board, word, row, col, horizontal);
                         if (play_success) {
-                            // Remove only the used letters from rack
                             for (char c : letters_to_remove) {
                                 players[i].rack.remove_letter(c);
                             }
                             players[i].rack.fill_rack(bag);
 
-                            // Bingo bonus
                             if (letters_to_remove.size() == 7) {
                                 players[i].add_points(50);
                                 std::cout << "Bingo! 50 bonus points added!" << std::endl;
@@ -245,7 +228,6 @@ void Game::play_game() {
                             valid_turn = true;
                             pass_count = 0;
                         } else {
-                            // Improved error message for failed placement
                             std::cout << "Failed to place word: adjacent words are not valid. Please try again.\n";
                             continue;
                         }
@@ -329,47 +311,6 @@ void Game::play_game() {
                             pass_count++;
                             break;
                         }
-=======
-                        
-                        // Error handling
-                        while (n < 1 || n > 7) {
-                            std::cout << "Invalid input. The max is 7 tiles. Please try again: ";
-                            // Clear input
-                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                            std::cin >> n;
-                        }
-
-                        std::cout << "Please enter the letter(s) for the tiles you want to exchange (no spaces between letters): ";
-                        std::string exchange;
-                        std::cin >> exchange;
-                        
-                        try {
-                            for (int a = 0; a < exchange.length(); a++) {
-                                bool found = false;
-                                for (int b = 0; a < players[i].rack.get_tile_count() && !found; a++) {
-                                    if (exchange[a] == players[i].rack[i].get_letter()) {
-                                        found = true;
-                                    }
-                                    if (!found) {
-                                        throw std::invalid_argument("One of the letters is not part of your rack.");
-                                    }
-                                }
-                            }
-                        } catch (const std::invalid_argument& err) {
-                            std::cout << "Please try again: ";
-                            // Clear inputs
-                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                            std::cin >> exchange;
-                        }
-                        
-                        // Process of exchanging letters
-                        for (int j = 0; j < exchange.length(); j++) {
-                            char letter = exchange[j];
-                            players[i].rack.exchange_tile(letter, bag);
-                        }                            
-                        valid_turn = true;
-                        pass_count++;
->>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                         break;
                     }
                     case 4: {
@@ -394,8 +335,6 @@ void Game::play_game() {
             }
         }
     }
-<<<<<<< HEAD
-=======
 }
 
 // Utility function to trim whitespace from both ends of a string

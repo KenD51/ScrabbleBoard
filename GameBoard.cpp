@@ -75,7 +75,6 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
         return false;
     }
 
-    // Check the rule for the first word placement
     if (!firstWordPlaced) {
         cout << "Debug (isValidPlacement): Validating first word placement." << endl;
         int center = BOARD_SIZE / 2; // Center is at index 7 (0-based)
@@ -105,14 +104,13 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
             char boardLetter = board[r][c].letter; //Get Letter
             // If overlapping a letter, it must match
             if (boardLetter != ' ' && boardLetter != '*') {
-                if (boardLetter == toupper(word[i])) {
-                    // No longer needed
+                if (boardLetter == std::toupper(word[i])) {
+                    // Overlap is valid
                 } else {
                     std::cout << "Debug: Overlapping, different letter at position (" << r + 1 << ", " << c + 1 << ")." << std::endl;
                     return false;
                 }
             }
-            //This block checks whether at least one tile in the word being placed is adjacent to an already placed letter, 
             // Check if the current letter's position has an adjacent existing letter
             int dr[] = {-1, 1, 0, 0}; // Row offsets: -1 = up, +1 = down, 0 = same row
             int dc[] = {0, 0, -1, 1};  // Column offsets: 0 = same column, -1 = left, +1 = right
@@ -166,15 +164,6 @@ bool GameBoard::placeWord(const std::string& word, int row, int col, char direct
         cout << "Invalid placement as determined by isValidPlacement." << endl;
         return false;
     }
-<<<<<<< HEAD
-=======
-}
-
-char GameBoard::getTile(int row, int col) const {
-    // Defensive: check bounds if needed
-    if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return ' ';
-    return board[row][col].letter;
->>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
 }
 
 char GameBoard::getTile(int row, int col) const {
