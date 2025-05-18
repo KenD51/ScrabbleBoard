@@ -9,7 +9,6 @@
 #include <string>       // For string handling
 #include <cstdlib>      // For general utilities
 
-
 // Forward declare LetterBag to avoid circular dependency
 class LetterBag;
 
@@ -91,6 +90,8 @@ class Game;
 
 // Class representing the game board
 class GameBoard {
+private:
+    std::vector<std::vector<Square>> board;  // 2D vector to represent the game board
 public:
     GameBoard(); // Add this constructor declaration
     // Validates if a word can be placed at given position
@@ -107,27 +108,25 @@ public:
 
     // Gets the tile at the specified position
     char getTile(int row, int col) const; // Returns the letter at the given position
+    
+    // Gets all possible words formed from placement    
     std::vector<std::string> getAllWordsFormed(const std::string& word, int row, int col, bool horizontal) const;
+    
+    // Checks all words formed by placement are valid
     bool allAdjacentWordsValid(const std::string& word, int row, int col, bool horizontal, Game& game) const;
-private:
-    std::vector<std::vector<Square>> board;  // 2D vector to represent the game board
 };
 
 // Class representing a player
 class Player {
 private:
     std::string name;        // Player's name
-    int order_number;        // Player's turn order
     int points;              // Player's current score
 
 public:
     LetterRack rack;         // Player's tile rack (moved to public for accessibility)
 
-    Player() : name("Player"), points(0), order_number(0) {}  // Explicit default constructor
-    Player(std::string the_name, int the_points = 0) : name(the_name), points(the_points), order_number(0) {}  // Parameterized constructor
-
-    // Getter for turn order
-    int get_order_number() const;
+    Player() : name("Player"), points(0) {}  // Explicit default constructor
+    Player(std::string the_name, int the_points = 0) : name(the_name), points(the_points) {}  // Parameterized constructor
 
     // Getter for current points
     int get_points() const;
@@ -147,9 +146,6 @@ public:
     // Getter for player name
     std::string get_name() const;
 
-    // Setter for turn order
-    void set_order_number(int order);
-
     // Adds points to the player's score
     void add_points(int additional_points);
 };
@@ -160,21 +156,21 @@ public:
     std::vector<Player> players; // Made players public for accessibility
 
 private:
-    int pass_count;              // Count of consecutive passes
+    int noPointTurn_count;       // Count of consecutive turns with no points earned
     int playerNum;               // Number of players
     GameBoard board;             // Game board
     LetterBag bag;               // Tile bag
     int current_player_index;    // Index of current player
     
 public:
-    // Constructor with optional player count and pass count
+    // Constructor with optional player count
     Game(int num_players = 0);
     
     // Main game loop
     void play_game();
     
-    // Getter for pass count
-    int get_pass_count() const;
+    // Getter for number of consecutive turns with no points earned
+    int get_noPointTurn_count() const;
     
     // Determines and announces the winner
     void determine_winner();
@@ -196,13 +192,6 @@ public:
 
      // Checks if the word is part of the dictionary
     bool dictionaryCheck(const std::string& word);
-    
-
-    // Validates if a word is valid
-    bool is_valid_word(const std::string& word);
-
-    // Announces the winner of the game
-    void announce_winner();
 
     void print_scores() const;
 };

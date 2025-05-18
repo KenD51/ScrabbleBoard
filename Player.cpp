@@ -2,11 +2,6 @@
 #include <iostream>
 #include <string>
 
-// Returns the order number of the player (e.g., 1st, 2nd player)
-int Player::get_order_number() const {
-    return order_number;
-}
-
 // Returns the current score (total points) of the player
 int Player::get_points() const {
     return points;
