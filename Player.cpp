@@ -1,20 +1,10 @@
-#include "scrabble.h" // Includes the header file where class declarations and dependencies are defined
+#include "scrabble.h" // Ensure LetterBag is included
 #include <iostream>
-
-// Default Constructor: Initializes a Player object with 0 points
-Player::Player() : points(0) {}
-
-// Parameterized Constructor: Initializes a Player with a given name and points
-Player::Player(std::string the_name, int the_points) : name(the_name), points(the_points) {}
+#include <string>
 
 // Returns the order number of the player (e.g., 1st, 2nd player)
 int Player::get_order_number() const {
     return order_number;
-}
-
-// Returns the player's rack
-LetterRack Player::get_rack() const {
-    return rack;
 }
 
 // Returns the current score (total points) of the player
@@ -22,81 +12,76 @@ int Player::get_points() const {
     return points;
 }
 
-// Returns the name of the player
+// Adds points to the player's score
+void Player::add_points(int additional_points) {
+    points += additional_points;
+}
+
+// Implemented missing Player::get_rack function
+LetterRack Player::get_rack() const {
+    return rack;
+}
+
+// Implemented missing Player::set_name function
+void Player::set_name(const std::string& name) {
+    this->name = name;
+}
+
+// Implemented missing Player::get_name function
 std::string Player::get_name() const {
     return name;
 }
 
 // Main function to allow a player to play a word on the board
-void Player::play_word(GameBoard& board, const std::string& word, int row, int col, char direction) {
-// For blank tile case
-    for (int i = 0; i < rack.tile_count; ++i) {
-            if (rack[i].get_letter() == '*') {
-                std::cout << "Blank tile found. Use it? (y/n): ";
-                char choice; std::cin >> choice;
-                if (choice == 'y') {
-                    std::cout << "Assign a letter to blank tile: ";
-                    char assign; std::cin >> assign;
-                    assign = std::toupper(assign);
-                    rack[i] = LetterTile(assign, 0);
-                }
-            }
-        }
-    
-    // Attempt to place the word and get all formed words and used letters
-    WordPlacementResult result = board.placeWord(word, row, col, direction);
+bool Player::play_word(GameBoard& board, const std::string& word, int row, int col, bool horizontal) {
+    if (board.placeWord(word, row, col, horizontal ? 'H' : 'V')) {
+        points += calculate_score(word);
 
-    if (result.valid && !result.words_formed.empty()) {
-        int total_score = 0;
-
-        std::cout << "Words formed: ";
-        for (const std::string& w : result.words_formed) {
-            std::cout << w << " ";
-            total_score += calculate_score(w);
-        }
-        std::cout << std::endl;
-
-        points += total_score;
-        std::cout << "Score gained: " << total_score << std::endl;
-
-        // Remove letters used from the rack
-        for (char letter : result.letters_used_from_rack) {
-            rack.remove_letter(letter);
-        }
-
-        // Check for Bingo (using all 7 letters from the rack)
-        if (result.letters_used_from_rack.size() == 7) {
+        // Check for bingo (using all tiles - assuming rack size is 7)
+        if (word.length() == rack.get_tile_count()) {
             points += 50;
             std::cout << "Bingo! 50 bonus points added!" << std::endl;
         }
-
+        return true; // Word successfully placed
     } else {
-        std::cout << "Invalid word placement!" << std::endl;
+        std::cout << "Invalid word placement." << std::endl;
+        return false; // Word placement failed
     }
 }
 
 // Helper function to calculate Scrabble score of a word based on individual letters
 int Player::calculate_score(const std::string& word) {
     int score = 0;
+    // Loop through each character in the word
     for (char c : word) {
-        switch (c) {
+        // Convert to uppercase to handle lowercase input
+        char uc = std::toupper(static_cast<unsigned char>(c));
+        // Add points based on standard Scrabble letter values
+        switch (uc) {
             case 'A': case 'E': case 'I': case 'L': case 'N': 
             case 'O': case 'R': case 'S': case 'T': case 'U':
-                score += 1; break;
+                score += 1; // Common letters worth 1 point
+                break;
             case 'D': case 'G':
-                score += 2; break;
+                score += 2; // Slightly less common letters worth 2 points
+                break;
             case 'B': case 'C': case 'M': case 'P':
-                score += 3; break;
+                score += 3;
+                break;
             case 'F': case 'H': case 'V': case 'W': case 'Y':
-                score += 4; break;
+                score += 4;
+                break;
             case 'K':
-                score += 5; break;
+                score += 5;
+                break;
             case 'J': case 'X':
-                score += 8; break;
+                score += 8;
+                break;
             case 'Q': case 'Z':
-                score += 10; break;
+                score += 10;
+                break;
             default:
-                score += 0; break; // Blank tile or invalid
+                break; // Ignore invalid characters
         }
     }
     return score;
