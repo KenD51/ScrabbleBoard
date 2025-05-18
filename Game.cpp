@@ -36,12 +36,8 @@ Game::Game(int num_players) : noPointTurn_count(0), playerNum(num_players), curr
 
     // Fill racks
     for (auto& player : players) {
-        std::cout << "------- Filling " << player.get_name() << "'s Rack Process-------" << std::endl;
         player.rack.fill_rack(bag);
-        std::cout << "Rack for player " << player.get_name() << " filled with " << player.rack.get_tile_count() << " tiles." << std::endl;
     }
-
-    std::cout << "\nRemaining LetterBag size: " << bag.Bag.size() << std::endl;
 }
 
 // Returns the number of consecutive turns with no points earned
@@ -52,7 +48,6 @@ int Game::get_noPointTurn_count() const {
 // Determines the turn order of players by drawing unique tiles for each player. This is an incorrect way to do it, but it works for now.
 void Game::determine_turn_order() {
     bool unique_tiles = false; //The person who  has the unqiue tile goes first
-    std::cout << "Determining turn order..." << std::endl;
     std::vector<char> drawn_tiles;  // Vector to store drawn tiles for each player
 
     // Keep drawing tiles until all drawn tiles are unique
@@ -112,7 +107,6 @@ void Game::play_game() {
             bool valid_turn = false;
             while (!valid_turn) {
                 std::cout << "\n======= " << players[i].get_name() << "'s turn =======" << std::endl;
-                players[i].rack.print_rack();
 
                 std::cout << std::endl << "No Point Turns Count: " << get_noPointTurn_count() << std::endl;
     
@@ -120,6 +114,9 @@ void Game::play_game() {
 
                 std::cout << "\nCurrent Board State:" << std::endl;
                 board.printBoard();
+
+                std::cout << std::endl;
+                players[i].rack.print_rack();
 
                 // Let the player pick what they want to do
                 int selection;
@@ -288,7 +285,6 @@ void Game::play_game() {
                         }
                         if (play_success) {
                             try {
-                                std::cout << "\n------- Filling " << players[i].get_name() << "'s Rack Process-------" << std::endl; 
                                 players[i].rack.fill_rack(bag);
                                 noPointTurn_count = 0;
                             } catch (const std::runtime_error& err) {
@@ -402,7 +398,7 @@ void Game::play_game() {
                     std::cout << "No Point Turns Count: " << get_noPointTurn_count() << std::endl;
                     print_scores();
                     std::cout << "Tiles Left in Bag: " << bag.Bag.size() << std::endl;
-                    std::cout << "-----------------------" << std::endl << std::endl;
+                    std::cout << "-----------------------" << std::endl;
                 }
             }
         }
@@ -499,12 +495,6 @@ void Game::determine_winner() {
 
 // Updated is_game_over. 
 bool Game::is_game_over() const {
-    std::cout << "Checking if the game is over..." << std::endl;
-    for (const auto& player : players) {
-        std::cout << "Player " << player.get_name() << " has " << player.rack.get_tile_count() << " tiles in their rack." << std::endl;
-    }
-    std::cout << "LetterBag has " << bag.Bag.size() << " tiles remaining." << std::endl;
-
     for (const auto& player : players) {
         if (player.rack.get_tile_count() == 0 && bag.is_empty()) {
             std::cout << "Game over condition met: Player " << player.get_name() << " has an empty rack and the bag is empty." << std::endl;
