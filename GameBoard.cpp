@@ -62,26 +62,19 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
     col--;
     direction = toupper(direction);
 
-    // Debug output for placement
-    cout << "Debug (isValidPlacement): Checking placement for word '" << word << "' at row " << row + 1 << ", column " << col + 1 << " in direction '" << direction << "'." << endl;
-    cout << "Debug (isValidPlacement): Word length: " << wordLength << endl;
-
     // Check board boundaries
     if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
-        cout << "Debug (isValidPlacement): Placement out of board boundaries." << endl;
         return false;
     }
 
     // Check if the word fits horizontally or vertically
     if ((direction == 'H' && col + wordLength > BOARD_SIZE) ||
         (direction == 'V' && row + wordLength > BOARD_SIZE)) {
-        cout << "Debug (isValidPlacement): Placement exceeds board boundaries." << endl;
         return false;
     }
 
     // First word must cover the center square
     if (!firstWordPlaced) {
-        cout << "Debug (isValidPlacement): Validating first word placement." << endl;
         int center = BOARD_SIZE / 2; // Center is at index 7 (0-based)
         bool coversCenter = false;
         // Check if any letter of the word covers the center square
@@ -94,10 +87,8 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
             }
         }
         if (!coversCenter) {
-            cout << "Debug (isValidPlacement): First word does not cover the center." << endl;
             return false;
         }
-        cout << "Debug (isValidPlacement): First word covers the center." << endl;
         return true;
     } else {
         // For subsequent words, must connect to existing words
@@ -111,7 +102,6 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
                 if (boardLetter == std::toupper(word[i])) {
                     // Overlap is valid
                 } else {
-                    std::cout << "Debug: Overlapping, different letter at position (" << r + 1 << ", " << c + 1 << ")." << std::endl;
                     return false;
                 }
             }
@@ -130,23 +120,17 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
             if (connects) break;
         }
         if (!connects) {
-            cout << "Debug (isValidPlacement): Subsequent word does not connect to existing letters." << endl;
             return false;
         }
-        cout << "Debug (isValidPlacement): Placement is valid." << endl;
         return true;
     }
 }
 
-// placeWord function updates the board with the placed word if the placement is valid.
-// It calls isValidPlacement to check validity, then places the word horizontally or vertically.
 bool GameBoard::placeWord(const std::string& word, int row, int col, char direction) {
     // Convert to 0-based indexing
     row--;
     col--;
     direction = toupper(direction);
-
-    cout << "Debug (placeWord): Attempting to place '" << word << "' at row " << row + 1 << ", column " << col + 1 << " in direction '" << direction << "'." << endl;
 
     // Validate placement
     if (isValidPlacement(word, row + 1, col + 1, direction)) {
@@ -154,14 +138,12 @@ bool GameBoard::placeWord(const std::string& word, int row, int col, char direct
 
         // Place the word on the board horizontally
         if (direction == 'H') {
-            cout << "Debug (placeWord): Placing horizontally." << endl;
             for (int i = 0; i < wordLength; ++i) {
                 board[row][col + i].letter = toupper(word[i]);
             }
         }
         // Place the word on the board vertically
         else if (direction == 'V') {
-            cout << "Debug (placeWord): Placing vertically." << endl;
             for (int i = 0; i < wordLength; ++i) {
                 board[row + i][col].letter = toupper(word[i]);
             }
@@ -171,7 +153,6 @@ bool GameBoard::placeWord(const std::string& word, int row, int col, char direct
         firstWordPlaced = true;
         return true;
     } else {
-        cout << "Invalid placement as determined by isValidPlacement." << endl;
         return false;
     }
 }
