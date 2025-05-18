@@ -84,3 +84,17 @@ const LetterTile& LetterRack::operator[](int index) const {
     }
     return rack[index];
 }
+
+// Check if the rack contains a specific letter
+// Parameters:
+//   letter - The character to check for in the rack
+// Returns:
+//   True if the letter is found, false otherwise
+bool LetterRack::has_letter(char letter) const {
+    for (int i = 0; i < SIZE; ++i) {
+        if (rack[i].get_letter() == letter) {
+            return true;
+        }
+    }
+    return false;
+}

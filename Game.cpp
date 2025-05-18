@@ -134,10 +134,11 @@ void Game::play_game() {
                     std::cout << "Please enter your number selection (1, 2, or 3): ";
                     std::cin >> selection;
 
-                    // Dealing with errors in entering selection number
-                    while (selection != 1 && selection != 2 && selection != 3) {
-                        // Clear input
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    //I added this
+                    // Handle non-integer input and invalid selections
+                    while (std::cin.fail() || (selection != 1 && selection != 2 && selection != 3)) {
+                        std::cin.clear(); // Clear error state
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
                         std::cout << "Invalid number selection. Please try again: ";
                         std::cin >> selection;
                     }
@@ -148,11 +149,10 @@ void Game::play_game() {
                     std::cout << "Enter your number selection (1, 2, 3, or 4): ";
                     std::cin >> selection;
 
-                    // Dealing with errors in entering selection number
-                    while (std::cin.fail() || selection != 1 && selection != 2 && selection != 3 && selection != 4) {
-                        std::cin.clear(); // Clear the error flag
-                        // Clear input
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    // Handle non-integer input and invalid selections
+                    while (std::cin.fail() || (selection != 1 && selection != 2 && selection != 3 && selection != 4)) {
+                        std::cin.clear(); // Clear error state
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
                         std::cout << "Invalid number selection. Please try again: ";
                         std::cin >> selection;
                     }
@@ -183,27 +183,47 @@ void Game::play_game() {
                         // Clear the rest of the line to avoid leftover input
                         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-                        // Do NOT convert row and col to 0-based indices here! This is super important!!!!
-                        // Pass user input (1-based) directly to isValidPlacement
                         bool horizontal = (direction == 'H' || direction == 'h');
                         if (!board.isValidPlacement(word, row, col, horizontal ? 'H' : 'V')) {
                             std::cout << "Invalid placement. Please try again." << std::endl;
                             continue;
                         }
 
-                        // Do NOT convert row and col to 0-based indices here for play_word either!
-                        // The play_word and GameBoard::placeWord logic expects 1-based indices for the first word.
-
+                        // Only remove letters from rack that are actually placed (not already on board)
+                        std::vector<char> letters_to_remove;
+                        int r = row - 1;
+                        int c = col - 1;
+                        bool can_place = true;
+                        for (size_t idx = 0; idx < word.size(); ++idx) {
+                            int cur_r = r + (horizontal ? 0 : idx);
+                            int cur_c = c + (horizontal ? idx : 0);
+                            // Use a public getter for board tiles
+                            char board_letter = board.getTile(cur_r, cur_c);
+                            // Compare case-insensitively and skip if board already has the letter
+                            if (std::toupper(board_letter) == word[idx]) {
+                                continue;
+                            }
+                            // Otherwise, must use rack letter
+                            if (!players[i].rack.has_letter(word[idx])) {
+                                std::cout << "You do not have the letter '" << word[idx] << "' in your rack and it's not on the board at this position. Try again.\n";
+                                can_place = false;
+                                break;
+                            }
+                            letters_to_remove.push_back(word[idx]);
+                        }
+                        if (!can_place) {
+                            continue;
+                        }
                         // Try to play the word
                         if (players[i].play_word(board, word, row, col, horizontal)) {
-                            // Remove used letters from rack
-                            for (char c : word) {
+                            // Remove only the used letters from rack
+                            for (char c : letters_to_remove) {
                                 players[i].rack.remove_letter(c);
                             }
                             players[i].rack.fill_rack(bag);
 
                             // Bingo bonus
-                            if (word.length() == 7) {
+                            if (letters_to_remove.size() == 7) {
                                 players[i].add_points(50);
                                 std::cout << "Bingo! 50 bonus points added!" << std::endl;
                             }

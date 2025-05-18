@@ -9,11 +9,9 @@
 #include <string>       // For string handling
 #include <cstdlib>      // For general utilities
 
+
 // Forward declare LetterBag to avoid circular dependency
 class LetterBag;
-
-// Forward declare GameBoard to avoid circular dependency
-class GameBoard;
 
 // Class representing a single Scrabble tile
 class LetterTile {
@@ -61,6 +59,9 @@ public:
 
     // Access operator for tiles in the rack
     const LetterTile& operator[](int index) const;
+
+    // Check if the rack has a specific letter
+    bool has_letter(char letter) const;
 };
 
 // Class representing the tile bag
@@ -87,13 +88,8 @@ struct Square {
 
 // Class representing the game board
 class GameBoard {
-private:
-    std::vector<std::vector<Square>> board;  // 2D vector of squares
-    static const int BOARD_SIZE = 15;        // Standard Scrabble board size
-    
 public:
-    GameBoard();  // Constructor initializes empty board
-    
+    GameBoard(); // Add this constructor declaration
     // Validates if a word can be placed at given position
     bool isValidPlacement(const std::string& word, int row, int col, char direction) const;
     
@@ -105,6 +101,11 @@ public:
 
     // Initializes the board
     std::vector<std::vector<Square>> initializeBoard();
+
+    // Gets the tile at the specified position
+    char getTile(int row, int col) const; // Returns the letter at the given position
+private:
+    std::vector<std::vector<Square>> board;  // 2D vector to represent the game board
 };
 
 // Class representing a player

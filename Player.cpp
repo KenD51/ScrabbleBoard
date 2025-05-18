@@ -1,4 +1,6 @@
 #include "scrabble.h" // Ensure LetterBag is included
+#include <iostream>
+#include <string>
 
 // Returns the order number of the player (e.g., 1st, 2nd player)
 int Player::get_order_number() const {
@@ -50,11 +52,12 @@ bool Player::play_word(GameBoard& board, const std::string& word, int row, int c
 // Helper function to calculate Scrabble score of a word based on individual letters
 int Player::calculate_score(const std::string& word) {
     int score = 0;
-    
     // Loop through each character in the word
     for (char c : word) {
+        // Convert to uppercase to handle lowercase input
+        char uc = std::toupper(static_cast<unsigned char>(c));
         // Add points based on standard Scrabble letter values
-        switch (c) {
+        switch (uc) {
             case 'A': case 'E': case 'I': case 'L': case 'N': 
             case 'O': case 'R': case 'S': case 'T': case 'U':
                 score += 1; // Common letters worth 1 point

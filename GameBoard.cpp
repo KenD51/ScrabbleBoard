@@ -2,13 +2,15 @@
 // This cpp file contains the implementations of the Scrabble board class.
 // It prints the board and allows words to be placed on the board, while also validating them.
 
-#include "scrabble.h" // Ensure LetterBag is included (though not directly used in this file)
+#include "scrabble.h"
 #include <iostream>
 #include <iomanip>
-#include <cctype> // For toupper
+#include <cctype>
 #include <string>
 
 using namespace std;
+
+const int BOARD_SIZE = 15; // Make sure this matches your board size everywhere
 
 // Add a flag to track if the first word has been placed
 bool firstWordPlaced = false;
@@ -164,4 +166,10 @@ bool GameBoard::placeWord(const std::string& word, int row, int col, char direct
         cout << "Invalid placement as determined by isValidPlacement." << endl;
         return false;
     }
+}
+
+char GameBoard::getTile(int row, int col) const {
+    // Defensive: check bounds if needed
+    if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return ' ';
+    return board[row][col].letter;
 }

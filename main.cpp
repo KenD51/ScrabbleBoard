@@ -29,12 +29,15 @@ int main() {
         // Loop to get a valid number of players (2-4) from the user
         do {
             std::cin.clear(); // Clear any error flags from previous input attempts
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard any invalid input left in the buffer
             std::cout << "Enter the number of players (2-4): ";
             std::cin >> num_players;
 
             // Check if the input was valid and within the allowed range
-            if (std::cin.fail() || num_players < 2 || num_players > 4) {
+            if (std::cin.fail()) {
+                std::cin.clear(); // Clear error state
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+                std::cout << "Invalid input. Please enter a number between 2 and 4." << std::endl;
+            } else if (num_players < 2 || num_players > 4) {
                 std::cout << "Invalid input. Please enter a number between 2 and 4." << std::endl;
             }
         } while (std::cin.fail() || num_players < 2 || num_players > 4);
