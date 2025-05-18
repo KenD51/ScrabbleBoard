@@ -166,6 +166,15 @@ bool GameBoard::placeWord(const std::string& word, int row, int col, char direct
         cout << "Invalid placement as determined by isValidPlacement." << endl;
         return false;
     }
+<<<<<<< HEAD
+=======
+}
+
+char GameBoard::getTile(int row, int col) const {
+    // Defensive: check bounds if needed
+    if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return ' ';
+    return board[row][col].letter;
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
 }
 
 char GameBoard::getTile(int row, int col) const {

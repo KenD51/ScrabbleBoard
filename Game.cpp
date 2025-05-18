@@ -134,6 +134,10 @@ void Game::play_game() {
                     std::cout << "Please enter your number selection (1, 2, or 3): ";
                     std::cin >> selection;
 
+<<<<<<< HEAD
+=======
+                    //I added this
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                     // Handle non-integer input and invalid selections
                     while (std::cin.fail() || (selection != 1 && selection != 2 && selection != 3)) {
                         std::cin.clear(); // Clear error state
@@ -188,12 +192,15 @@ void Game::play_game() {
                             continue;
                         }
 
+<<<<<<< HEAD
                         // Fix: Remove stray function signature and use correct call
                         if (!board.allAdjacentWordsValid(word, row, col, horizontal, *this)) {
                             std::cout << "Invalid move: All words formed (including adjacent) must be valid dictionary words." << std::endl;
                             continue;
                         }
 
+=======
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                         // Only remove letters from rack that are actually placed (not already on board)
                         std::vector<char> letters_to_remove;
                         int r = row - 1;
@@ -220,8 +227,12 @@ void Game::play_game() {
                             continue;
                         }
                         // Try to play the word
+<<<<<<< HEAD
                         bool play_success = players[i].play_word(board, word, row, col, horizontal);
                         if (play_success) {
+=======
+                        if (players[i].play_word(board, word, row, col, horizontal)) {
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                             // Remove only the used letters from rack
                             for (char c : letters_to_remove) {
                                 players[i].rack.remove_letter(c);
@@ -237,8 +248,12 @@ void Game::play_game() {
                             valid_turn = true;
                             pass_count = 0;
                         } else {
+<<<<<<< HEAD
                             // Improved error message for failed placement
                             std::cout << "Failed to place word: adjacent words are not valid. Please try again.\n";
+=======
+                            std::cout << "Failed to place word. Please try again.\n";
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                             continue;
                         }
                         break;
@@ -254,6 +269,7 @@ void Game::play_game() {
                         std::cout << "Please enter the number of tiles you want to exchange: ";
                         int n;
                         std::cin >> n;
+<<<<<<< HEAD
 
                         // Error handling for non-integer input and out-of-range
                         while (std::cin.fail() || n < 1 || n > players[i].rack.get_tile_count()) {
@@ -321,6 +337,47 @@ void Game::play_game() {
                             pass_count++;
                             break;
                         }
+=======
+                        
+                        // Error handling
+                        while (n < 1 || n > 7) {
+                            std::cout << "Invalid input. The max is 7 tiles. Please try again: ";
+                            // Clear input
+                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                            std::cin >> n;
+                        }
+
+                        std::cout << "Please enter the letter(s) for the tiles you want to exchange (no spaces between letters): ";
+                        std::string exchange;
+                        std::cin >> exchange;
+                        
+                        try {
+                            for (int a = 0; a < exchange.length(); a++) {
+                                bool found = false;
+                                for (int b = 0; a < players[i].rack.get_tile_count() && !found; a++) {
+                                    if (exchange[a] == players[i].rack[i].get_letter()) {
+                                        found = true;
+                                    }
+                                    if (!found) {
+                                        throw std::invalid_argument("One of the letters is not part of your rack.");
+                                    }
+                                }
+                            }
+                        } catch (const std::invalid_argument& err) {
+                            std::cout << "Please try again: ";
+                            // Clear inputs
+                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                            std::cin >> exchange;
+                        }
+                        
+                        // Process of exchanging letters
+                        for (int j = 0; j < exchange.length(); j++) {
+                            char letter = exchange[j];
+                            players[i].rack.exchange_tile(letter, bag);
+                        }                            
+                        valid_turn = true;
+                        pass_count++;
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                         break;
                     }
                     case 4: {
@@ -345,6 +402,126 @@ void Game::play_game() {
             }
         }
     }
+<<<<<<< HEAD
+=======
+}
+
+// Utility function to trim whitespace from both ends of a string
+static std::string trim(const std::string& s) {
+    size_t start = s.find_first_not_of(" \t\r\n");
+    size_t end = s.find_last_not_of(" \t\r\n");
+    return (start == std::string::npos) ? "" : s.substr(start, end - start + 1);
+}
+
+ // Checks if the word is part of the dictionary
+bool Game::dictionaryCheck(const std::string& word) {
+    // Try both "words.txt" and "words" for compatibility
+    std::ifstream input_file("words.txt");
+    if (input_file.fail()) {
+        input_file.clear();
+        input_file.open("words");
+    }
+    if (input_file.fail()) {
+        std::cerr << "[DEBUG] Cannot open 'words'." << std::endl;
+        throw std::ios_base::failure("Cannot open dictionary file.");
+    }
+    std::string word_upper = word;
+    std::transform(word_upper.begin(), word_upper.end(), word_upper.begin(), ::toupper);
+
+    std::string word_check;
+    while (std::getline(input_file, word_check)) {
+        // Remove whitespace and convert to uppercase for comparison
+        word_check.erase(word_check.find_last_not_of(" \n\r\t") + 1);
+        std::transform(word_check.begin(), word_check.end(), word_check.begin(), ::toupper);
+        if (word_upper == word_check) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Added definitions for is_valid_word and announce_winner becuse they didn't exist apparently.
+bool Game::is_valid_word(const std::string& word) {
+    // Placeholder implementation: Assume all words are valid
+    return !word.empty();
+}
+
+// Computes the final score of a player by subtracting the points of remaining tiles in their rack.
+// It takes the LetterRack of the player as input and returns the computed score after subtracting tile points.
+int Game::rack_points(LetterRack& rack) {
+    int total_tile_points = 0;  // Initialize variable to accumulate the total points of remaining tiles
+
+    // Loop through each tile in the rack to sum up their points
+    for (int i = 0; i < rack.SIZE; i++) {
+        total_tile_points += rack[i].get_point_value();  // Add the point value of the tile to total
+    }
+
+    // Return the total points of remaining tiles in the player's rack
+    return total_tile_points;
+}
+// Determines the winner(s) of the game based on their final scores and displays the results.
+void Game::determine_winner() {
+    std::vector<std::string> winners;    // Vector to hold the names of the winners
+    int highest_score = INT_MIN;         // Initialize the highest score to the smallest possible integer value
+
+    // Loop through each player to calculate their final score
+    for (auto& player : players) {
+        // Compute the player's final score: their total points minus the points of remaining tiles in their rack
+        int final_score = player.get_points() - rack_points(player.rack);
+
+        // If the current player's final score is higher than the highest score so far, update the highest score
+        // and clear the list of winners to only include the current player
+        if (final_score > highest_score) {
+            highest_score = final_score;
+            winners.clear();        // Clear previous winners
+            winners.push_back(player.get_name());  // Add the current player as the only winner
+        } 
+        // If the current player's final score equals the highest score, add them to the list of winners
+        else if (final_score == highest_score) {
+            winners.push_back(player.get_name());
+        }
+    }
+
+    // Display the end game results
+    std::cout << "\n====== Game Over ======" << std::endl;
+    
+    // Print each player's name along with their final score
+    for (auto& player : players) {
+        int final_score = player.get_points() - rack_points(player.rack);
+        std::cout << player.get_name() << ": " << final_score << " points" << std::endl;
+    }
+
+    // Announce the winner(s)
+    std::cout << "\nWinner(s): ";
+    for (const auto& winner : winners) {
+        std::cout << winner << " ";   // Print all players with the highest score
+    }
+    std::cout << std::endl;  // Print newline at the end of the winner list
+}
+
+// Updated is_game_over. 
+bool Game::is_game_over() const {
+    std::cout << "Checking if the game is over..." << std::endl;
+    for (const auto& player : players) {
+        std::cout << "Player " << player.get_name() << " has " << player.rack.get_tile_count() << " tiles in their rack." << std::endl;
+    }
+    std::cout << "LetterBag has " << bag.Bag.size() << " tiles remaining." << std::endl;
+
+    for (const auto& player : players) {
+        if (player.rack.get_tile_count() == 0 && bag.is_empty()) {
+            std::cout << "Game over condition met: Player " << player.get_name() << " has an empty rack and the bag is empty." << std::endl;
+            return true;
+        }
+    }
+    return false; // Game continues otherwise
+}
+
+void Game::print_scores() const {
+    std::cout << "Current Scores:" << std::endl;
+    for (const auto& player : players) {
+        std::cout << "Player " << player.get_order_number() << ": " << player.get_name() << " - " << player.get_points() << " points" << std::endl;
+    }
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
 }
 
 // Utility function to trim whitespace from both ends of a string

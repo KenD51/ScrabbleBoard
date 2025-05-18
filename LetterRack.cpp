@@ -97,4 +97,8 @@ bool LetterRack::has_letter(char letter) const {
         }
     }
     return false;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
