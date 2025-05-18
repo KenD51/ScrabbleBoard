@@ -21,8 +21,9 @@ GameBoard::GameBoard() : board(initializeBoard()) {}
 // initializeBoard function. Returns a 2D vector of Square objects
 // This function initializes the board with empty squares and places the center marker.
 std::vector<std::vector<Square>> GameBoard::initializeBoard() {
+    // Create a 15x15 board of empty squares
     std::vector<std::vector<Square>> newBoard(BOARD_SIZE, std::vector<Square>(BOARD_SIZE));
-    // Place the center star at (6,6) for 0-based row/col 7,7
+    // Place the center star at (7,7) for 0-based row/col 7,7
     int center = (BOARD_SIZE - 1) / 2; // 0-based index for row 7, col 7
     newBoard[center][center].letter = '*'; // Set the center square to a star
     return newBoard; // Board is initialized with empty squares
@@ -55,13 +56,16 @@ void GameBoard::printBoard() const {
 // It checks if the word fits within the board boundaries and if the placement is valid
 // according to the rules (first word covers center, subsequent words connect).
 bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char direction) const {
+    // Convert to 0-based indexing
     int wordLength = word.length();
-    row--; // Adjusting to 0-based indexing
-    col--; // Adjusting to 0-based indexing
+    row--;
+    col--;
     direction = toupper(direction);
 
+    // Debug output for placement
     cout << "Debug (isValidPlacement): Checking placement for word '" << word << "' at row " << row + 1 << ", column " << col + 1 << " in direction '" << direction << "'." << endl;
     cout << "Debug (isValidPlacement): Word length: " << wordLength << endl;
+
     // Check board boundaries
     if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) {
         cout << "Debug (isValidPlacement): Placement out of board boundaries." << endl;
@@ -75,17 +79,18 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
         return false;
     }
 
+    // First word must cover the center square
     if (!firstWordPlaced) {
         cout << "Debug (isValidPlacement): Validating first word placement." << endl;
         int center = BOARD_SIZE / 2; // Center is at index 7 (0-based)
         bool coversCenter = false;
-        // Iterate through the letters of the word to see if any cover the center
+        // Check if any letter of the word covers the center square
         for (int i = 0; i < wordLength; ++i) {
             int r = row + (direction == 'V' ? i : 0);
             int c = col + (direction == 'H' ? i : 0);
             if (r == center && c == center) {
                 coversCenter = true;
-                break; // Exit the loop as soon as the center is covered
+                break;
             }
         }
         if (!coversCenter) {
@@ -95,13 +100,12 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
         cout << "Debug (isValidPlacement): First word covers the center." << endl;
         return true;
     } else {
-        // Logic for validating subsequent word placements (must connect to existing words)
+        // For subsequent words, must connect to existing words
         bool connects = false;
         for (int i = 0; i < wordLength; ++i) {
-            //Get Coordinates
             int r = row + (direction == 'V' ? i : 0);
             int c = col + (direction == 'H' ? i : 0);
-            char boardLetter = board[r][c].letter; //Get Letter
+            char boardLetter = board[r][c].letter;
             // If overlapping a letter, it must match
             if (boardLetter != ' ' && boardLetter != '*') {
                 if (boardLetter == std::toupper(word[i])) {
@@ -112,17 +116,18 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
                 }
             }
             // Check if the current letter's position has an adjacent existing letter
-            int dr[] = {-1, 1, 0, 0}; // Row offsets: -1 = up, +1 = down, 0 = same row
-            int dc[] = {0, 0, -1, 1};  // Column offsets: 0 = same column, -1 = left, +1 = right
+            int dr[] = {-1, 1, 0, 0}; // Row offsets: up, down, same row
+            int dc[] = {0, 0, -1, 1}; // Column offsets: same column, left, right
             for (int j = 0; j < 4; ++j) {
                 int nr = r + dr[j];
                 int nc = c + dc[j];
+                // If adjacent square is within bounds and not empty, the word connects
                 if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE && board[nr][nc].letter != ' ') {
                     connects = true;
                     break;
                 }
             }
-            if (connects) break; // If this letter connects, the placement is valid so far
+            if (connects) break;
         }
         if (!connects) {
             cout << "Debug (isValidPlacement): Subsequent word does not connect to existing letters." << endl;
@@ -136,29 +141,34 @@ bool GameBoard::isValidPlacement(const std::string& word, int row, int col, char
 // placeWord function updates the board with the placed word if the placement is valid.
 // It calls isValidPlacement to check validity, then places the word horizontally or vertically.
 bool GameBoard::placeWord(const std::string& word, int row, int col, char direction) {
-    row--; // Adjust to 0-based indexing
-    col--; // Adjust to 0-based indexing
+    // Convert to 0-based indexing
+    row--;
+    col--;
     direction = toupper(direction);
 
     cout << "Debug (placeWord): Attempting to place '" << word << "' at row " << row + 1 << ", column " << col + 1 << " in direction '" << direction << "'." << endl;
 
-    // Call isValidPlacement once to determine validity
+    // Validate placement
     if (isValidPlacement(word, row + 1, col + 1, direction)) {
         int wordLength = word.length();
 
-        if (direction == 'H') { // Horizontal placement
+        // Place the word on the board horizontally
+        if (direction == 'H') {
             cout << "Debug (placeWord): Placing horizontally." << endl;
             for (int i = 0; i < wordLength; ++i) {
                 board[row][col + i].letter = toupper(word[i]);
             }
-        } else if (direction == 'V') { // Vertical placement
+        }
+        // Place the word on the board vertically
+        else if (direction == 'V') {
             cout << "Debug (placeWord): Placing vertically." << endl;
             for (int i = 0; i < wordLength; ++i) {
                 board[row + i][col].letter = toupper(word[i]);
             }
         }
 
-        firstWordPlaced = true; // Mark the first word as placed
+        // Mark that the first word has been placed
+        firstWordPlaced = true;
         return true;
     } else {
         cout << "Invalid placement as determined by isValidPlacement." << endl;
@@ -166,25 +176,26 @@ bool GameBoard::placeWord(const std::string& word, int row, int col, char direct
     }
 }
 
+// Returns the letter at the specified board position (row, col).
+// Returns ' ' if out of bounds.
 char GameBoard::getTile(int row, int col) const {
-    // Defensive: check bounds if needed
     if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return ' ';
     return board[row][col].letter;
 }
 
 // Helper: Collect all words formed by a placement (main and perpendicular)
+// Returns a vector of all words formed by placing 'word' at (row, col) in the given direction.
 std::vector<std::string> GameBoard::getAllWordsFormed(const std::string& word, int row, int col, bool horizontal) const {
     std::vector<std::string> words;
     int wordLength = word.length();
-    row--; col--; // 0-based
+    row--; col--; // Convert to 0-based indexing
 
-    // Main word
+    // Main word: find the full word in the main direction (including existing letters)
     std::string mainWord;
     int r = row, c = col;
-    // Find start of main word
+    // Find start of main word by moving backwards until empty or star
     while (r > 0 && !horizontal && board[r-1][c].letter != ' ' && board[r-1][c].letter != '*') r--;
     while (c > 0 && horizontal && board[r][c-1].letter != ' ' && board[r][c-1].letter != '*') c--;
-    int main_r = r, main_c = c;
     mainWord.clear();
     for (int i = 0; i < (horizontal ? BOARD_SIZE-c : BOARD_SIZE-r); ++i) {
         char ch = board[r + (horizontal ? 0 : i)][c + (horizontal ? i : 0)].letter;
@@ -195,28 +206,30 @@ std::vector<std::string> GameBoard::getAllWordsFormed(const std::string& word, i
     if (mainWord.empty()) mainWord = word;
     words.push_back(mainWord);
 
-    // Perpendicular words for each placed letter
+    // For each letter placed, check for perpendicular words formed
     for (int i = 0; i < wordLength; ++i) {
         int pr = row + (horizontal ? 0 : i);
         int pc = col + (horizontal ? i : 0);
-        // Only check if this square is empty or being replaced
+        // Only check if this square is empty or being replaced (i.e., a new tile is placed)
         if (board[pr][pc].letter == ' ' || board[pr][pc].letter == '*') {
             std::string perpWord;
             int start = (horizontal ? pr : pc);
             int fixed = (horizontal ? pc : pr);
-            // Find start
+            // Find start of perpendicular word
             while (start > 0 && board[horizontal ? start-1 : pr][horizontal ? pc : start-1].letter != ' ' && board[horizontal ? start-1 : pr][horizontal ? pc : start-1].letter != '*')
                 start--;
-            // Build word
+            // Build perpendicular word
             for (int j = 0; j < BOARD_SIZE; ++j) {
                 int rr = horizontal ? start+j : pr;
                 int cc = horizontal ? pc : start+j;
                 if (rr < 0 || rr >= BOARD_SIZE || cc < 0 || cc >= BOARD_SIZE) break;
                 char ch = board[rr][cc].letter;
+                // If this is the placed letter, use the new letter
                 if (rr == pr && cc == pc) ch = toupper(word[i]);
                 if (ch == ' ' || ch == '*') break;
                 perpWord += ch;
             }
+            // Only add if the perpendicular word is longer than 1 letter
             if (perpWord.length() > 1) words.push_back(perpWord);
         }
     }
@@ -224,6 +237,7 @@ std::vector<std::string> GameBoard::getAllWordsFormed(const std::string& word, i
 }
 
 // Checks if all words formed by a placement are valid using Game::dictionaryCheck
+// Returns true if all words are valid, false otherwise.
 bool GameBoard::allAdjacentWordsValid(const std::string& word, int row, int col, bool horizontal, Game& game) const {
     auto words = getAllWordsFormed(word, row, col, horizontal);
     for (const auto& w : words) {
