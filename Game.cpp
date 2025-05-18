@@ -149,7 +149,8 @@ void Game::play_game() {
                     std::cin >> selection;
 
                     // Dealing with errors in entering selection number
-                    while (selection != 1 && selection != 2 && selection != 3 && selection != 4) {
+                    while (std::cin.fail() || selection != 1 && selection != 2 && selection != 3 && selection != 4) {
+                        std::cin.clear(); // Clear the error flag
                         // Clear input
                         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                         std::cout << "Invalid number selection. Please try again: ";
