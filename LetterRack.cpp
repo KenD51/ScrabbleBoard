@@ -48,7 +48,7 @@ void LetterRack::fill_rack(LetterBag& bag) {
         } else if (rack[i].get_letter() != ' ') {
             std::cout << "Rack position " << i << " already filled with tile '" << rack[i].get_letter() << "'." << std::endl;
         } else {
-            std::cout << "Bag is empty. Cannot fill rack further." << std::endl;
+            throw std::runtime_error("Bag is empty. Cannot fill rack further.");
         }
     }
 }
