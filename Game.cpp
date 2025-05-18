@@ -44,7 +44,7 @@ int Game::get_noPointTurn_count() const {
     return noPointTurn_count;
 }
 
-// Determines the turn order of players by drawing unique tiles for each player. This is an incorrect way to do it, but it works for now.
+// Determines the turn order of players by drawing unique tiles for each player.
 void Game::determine_turn_order() {
     bool unique_tiles = false; //The person who  has the unqiue tile goes first
     std::vector<char> drawn_tiles;  // Vector to store drawn tiles for each player
