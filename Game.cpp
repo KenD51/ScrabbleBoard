@@ -256,6 +256,6 @@ bool Game::is_game_over() const {
 void Game::print_scores() const {
     std::cout << "Current Scores:" << std::endl;
     for (const auto& player : players) {
-        std::cout << "Player " << player.get_order_number() << ": " << player.get_name() << " - " << player.get_points() << " points" << std::endl;
+        std::cout << player.get_name() << " - " << player.get_points() << " points" << std::endl;
     }
 }
