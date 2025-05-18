@@ -44,7 +44,7 @@ void LetterRack::fill_rack(LetterBag& bag) {
             LetterTile tile = bag.draw_tile();
             rack[i] = tile;
             tile_count++;  // Increment tile count
-        } else {
+        } else if (bag.is_empty()) {
             throw std::runtime_error("Bag is empty. Cannot fill rack further.");
         }
     }

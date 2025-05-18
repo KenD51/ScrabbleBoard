@@ -1,4 +1,3 @@
-//I added a lot of debugging output as there was a lot of things to test.
 #include "scrabble.h"     // Include the header file that defines all the classes and methods used
 #include <algorithm>      // For std::sort to sort players based on the drawn tiles
 #include <iostream>       // For input and output, e.g., displaying prompts and results
@@ -45,7 +44,7 @@ int Game::get_noPointTurn_count() const {
     return noPointTurn_count;
 }
 
-// Determines the turn order of players by drawing unique tiles for each player. This is an incorrect way to do it, but it works for now.
+// Determines the turn order of players by drawing unique tiles for each player.
 void Game::determine_turn_order() {
     bool unique_tiles = false; //The person who  has the unqiue tile goes first
     std::vector<char> drawn_tiles;  // Vector to store drawn tiles for each player
