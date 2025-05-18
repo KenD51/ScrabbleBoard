@@ -29,6 +29,20 @@ std::string Player::get_name() const {
 
 // Main function to allow a player to play a word on the board
 void Player::play_word(GameBoard& board, const std::string& word, int row, int col, char direction) {
+// For blank tile case
+    for (int i = 0; i < rack.tile_count; ++i) {
+            if (rack[i].get_letter() == '*') {
+                std::cout << "Blank tile found. Use it? (y/n): ";
+                char choice; std::cin >> choice;
+                if (choice == 'y') {
+                    std::cout << "Assign a letter to blank tile: ";
+                    char assign; std::cin >> assign;
+                    assign = std::toupper(assign);
+                    rack[i] = LetterTile(assign, 0);
+                }
+            }
+        }
+    
     // Attempt to place the word and get all formed words and used letters
     WordPlacementResult result = board.placeWord(word, row, col, direction);
 
