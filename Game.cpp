@@ -1,4 +1,3 @@
-//I added a lot of debugging output as there was a lot of things to test.
 #include "scrabble.h"     // Include the header file that defines all the classes and methods used
 #include <algorithm>      // For std::sort to sort players based on the drawn tiles
 #include <iostream>       // For input and output, e.g., displaying prompts and results
