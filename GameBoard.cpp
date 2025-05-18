@@ -166,10 +166,82 @@ bool GameBoard::placeWord(const std::string& word, int row, int col, char direct
         cout << "Invalid placement as determined by isValidPlacement." << endl;
         return false;
     }
+<<<<<<< HEAD
+=======
 }
 
 char GameBoard::getTile(int row, int col) const {
     // Defensive: check bounds if needed
     if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return ' ';
     return board[row][col].letter;
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
+}
+
+char GameBoard::getTile(int row, int col) const {
+    // Defensive: check bounds if needed
+    if (row < 0 || row >= BOARD_SIZE || col < 0 || col >= BOARD_SIZE) return ' ';
+    return board[row][col].letter;
+}
+
+// Helper: Collect all words formed by a placement (main and perpendicular)
+std::vector<std::string> GameBoard::getAllWordsFormed(const std::string& word, int row, int col, bool horizontal) const {
+    std::vector<std::string> words;
+    int wordLength = word.length();
+    row--; col--; // 0-based
+
+    // Main word
+    std::string mainWord;
+    int r = row, c = col;
+    // Find start of main word
+    while (r > 0 && !horizontal && board[r-1][c].letter != ' ' && board[r-1][c].letter != '*') r--;
+    while (c > 0 && horizontal && board[r][c-1].letter != ' ' && board[r][c-1].letter != '*') c--;
+    int main_r = r, main_c = c;
+    mainWord.clear();
+    for (int i = 0; i < (horizontal ? BOARD_SIZE-c : BOARD_SIZE-r); ++i) {
+        char ch = board[r + (horizontal ? 0 : i)][c + (horizontal ? i : 0)].letter;
+        if (ch == ' ' || ch == '*') break;
+        mainWord += ch;
+    }
+    // If mainWord is empty, use the placed word
+    if (mainWord.empty()) mainWord = word;
+    words.push_back(mainWord);
+
+    // Perpendicular words for each placed letter
+    for (int i = 0; i < wordLength; ++i) {
+        int pr = row + (horizontal ? 0 : i);
+        int pc = col + (horizontal ? i : 0);
+        // Only check if this square is empty or being replaced
+        if (board[pr][pc].letter == ' ' || board[pr][pc].letter == '*') {
+            std::string perpWord;
+            int start = (horizontal ? pr : pc);
+            int fixed = (horizontal ? pc : pr);
+            // Find start
+            while (start > 0 && board[horizontal ? start-1 : pr][horizontal ? pc : start-1].letter != ' ' && board[horizontal ? start-1 : pr][horizontal ? pc : start-1].letter != '*')
+                start--;
+            // Build word
+            for (int j = 0; j < BOARD_SIZE; ++j) {
+                int rr = horizontal ? start+j : pr;
+                int cc = horizontal ? pc : start+j;
+                if (rr < 0 || rr >= BOARD_SIZE || cc < 0 || cc >= BOARD_SIZE) break;
+                char ch = board[rr][cc].letter;
+                if (rr == pr && cc == pc) ch = toupper(word[i]);
+                if (ch == ' ' || ch == '*') break;
+                perpWord += ch;
+            }
+            if (perpWord.length() > 1) words.push_back(perpWord);
+        }
+    }
+    return words;
+}
+
+// Checks if all words formed by a placement are valid using Game::dictionaryCheck
+bool GameBoard::allAdjacentWordsValid(const std::string& word, int row, int col, bool horizontal, Game& game) const {
+    auto words = getAllWordsFormed(word, row, col, horizontal);
+    for (const auto& w : words) {
+        if (!game.dictionaryCheck(w)) {
+            std::cout << "Invalid adjacent word: " << w << std::endl;
+            return false;
+        }
+    }
+    return true;
 }

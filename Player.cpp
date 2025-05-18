@@ -85,4 +85,8 @@ int Player::calculate_score(const std::string& word) {
         }
     }
     return score;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e

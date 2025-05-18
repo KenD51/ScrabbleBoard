@@ -86,6 +86,9 @@ struct Square {
     char letter = ' ';  // Default empty square
 };
 
+// Forward declaration to resolve circular dependency
+class Game;
+
 // Class representing the game board
 class GameBoard {
 public:
@@ -104,6 +107,11 @@ public:
 
     // Gets the tile at the specified position
     char getTile(int row, int col) const; // Returns the letter at the given position
+<<<<<<< HEAD
+    std::vector<std::string> getAllWordsFormed(const std::string& word, int row, int col, bool horizontal) const;
+    bool allAdjacentWordsValid(const std::string& word, int row, int col, bool horizontal, Game& game) const;
+=======
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
 private:
     std::vector<std::vector<Square>> board;  // 2D vector to represent the game board
 };

@@ -134,7 +134,10 @@ void Game::play_game() {
                     std::cout << "Please enter your number selection (1, 2, or 3): ";
                     std::cin >> selection;
 
+<<<<<<< HEAD
+=======
                     //I added this
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                     // Handle non-integer input and invalid selections
                     while (std::cin.fail() || (selection != 1 && selection != 2 && selection != 3)) {
                         std::cin.clear(); // Clear error state
@@ -189,6 +192,15 @@ void Game::play_game() {
                             continue;
                         }
 
+<<<<<<< HEAD
+                        // Fix: Remove stray function signature and use correct call
+                        if (!board.allAdjacentWordsValid(word, row, col, horizontal, *this)) {
+                            std::cout << "Invalid move: All words formed (including adjacent) must be valid dictionary words." << std::endl;
+                            continue;
+                        }
+
+=======
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                         // Only remove letters from rack that are actually placed (not already on board)
                         std::vector<char> letters_to_remove;
                         int r = row - 1;
@@ -215,7 +227,9 @@ void Game::play_game() {
                             continue;
                         }
                         // Try to play the word
-                        if (players[i].play_word(board, word, row, col, horizontal)) {
+<<<<<<< HEAD
+                        bool play_success = players[i].play_word(board, word, row, col, horizontal);
+                        if (play_success) {
                             // Remove only the used letters from rack
                             for (char c : letters_to_remove) {
                                 players[i].rack.remove_letter(c);
@@ -231,7 +245,8 @@ void Game::play_game() {
                             valid_turn = true;
                             pass_count = 0;
                         } else {
-                            std::cout << "Failed to place word. Please try again.\n";
+                            // Improved error message for failed placement
+                            std::cout << "Failed to place word: adjacent words are not valid. Please try again.\n";
                             continue;
                         }
                         break;
@@ -247,6 +262,74 @@ void Game::play_game() {
                         std::cout << "Please enter the number of tiles you want to exchange: ";
                         int n;
                         std::cin >> n;
+
+                        // Error handling for non-integer input and out-of-range
+                        while (std::cin.fail() || n < 1 || n > players[i].rack.get_tile_count()) {
+                            std::cin.clear(); // Clear error state
+                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+                            std::cout << "Invalid input. The max is " << players[i].rack.get_tile_count() << " tiles. Please try again: ";
+                            std::cin >> n;
+                        }
+
+                        std::string exchange;
+                        bool valid = false;
+                        while (!valid) {
+                            std::cout << "Please enter the letter(s) for the tiles you want to exchange (no spaces between letters): ";
+                            std::cin >> exchange;
+                            // Remove whitespace from input
+                            exchange.erase(std::remove_if(exchange.begin(), exchange.end(), ::isspace), exchange.end());
+                            // Check length
+                            if (exchange.length() != static_cast<size_t>(n)) {
+                                std::cout << "You must enter exactly " << n << " letter(s)." << std::endl;
+                                continue;
+                            }
+                            // Check all letters are in rack (allow duplicates only if present in rack)
+                            std::string rack_copy;
+                            for (int k = 0; k < players[i].rack.get_tile_count(); ++k) {
+                                rack_copy += std::toupper(static_cast<unsigned char>(players[i].rack[k].get_letter()));
+                            }
+                            bool all_found = true;
+                            for (char ch : exchange) {
+                                char up_ch = std::toupper(static_cast<unsigned char>(ch));
+                                auto pos = rack_copy.find(up_ch);
+                                if (pos == std::string::npos) {
+                                    all_found = false;
+                                    break;
+                                } else {
+                                    rack_copy.erase(pos, 1); // Remove used letter
+                                }
+                            }
+                            if (!all_found) {
+                                std::cout << "One or more letters are not in your rack." << std::endl;
+                                continue;
+                            }
+                            // Check if there are enough tiles in the bag to exchange
+                            if (bag.Bag.size() < n) {
+                                std::cout << "Not enough tiles in the bag to exchange. Please pass or play a word instead." << std::endl;
+                                break;
+                            }
+                            valid = true;
+
+                            // Process of exchanging letters
+                            bool exchange_success = true;
+                            for (char letter : exchange) {
+                                char up_letter = std::toupper(static_cast<unsigned char>(letter));
+                                try {
+                                    players[i].rack.exchange_tile(up_letter, bag);
+                                } catch (const std::exception& e) {
+                                    std::cout << "Exchange failed: " << e.what() << std::endl;
+                                    exchange_success = false;
+                                    break;
+                                }
+                            }
+                            if (!exchange_success) {
+                                continue; // Re-prompt for exchange if any letter failed
+                            }
+                            valid_turn = true;
+                            pass_count++;
+                            break;
+                        }
+=======
                         
                         // Error handling
                         while (n < 1 || n > 7) {
@@ -286,6 +369,7 @@ void Game::play_game() {
                         }                            
                         valid_turn = true;
                         pass_count++;
+>>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
                         break;
                     }
                     case 4: {
@@ -310,6 +394,8 @@ void Game::play_game() {
             }
         }
     }
+<<<<<<< HEAD
+=======
 }
 
 // Utility function to trim whitespace from both ends of a string
