@@ -156,6 +156,24 @@ void Game::play_game() {
                 // Player chooses to play word
                 switch (selection) {
                     case 1: {
+                        for (int k = 0; k < 7; k++){
+                            if( players[i].rack[k].get_letter() == '*'){
+                                std::cout << "Do you want to use the blank tile ?(y/n)"<< std::endl;
+                                char ans;
+                                std::cin>> ans;
+                                if(ans == 'y' || ans == 'Y'){
+                                    LetterTile l = players[i].rack.remove_letter('*');
+                                    bag.addTiles('*', 1, 0);
+                                    std::cout << "What letter do you want?" <<std::endl;
+                                    char as;
+                                    std::cin >> as;
+                                    LetterTile l2 = LetterTile(as, 0);
+                                    players[i].rack[k] = l2;
+                                    std::cout << "Letter rack updated : "<<std::endl;
+                                    players[i].rack.print_rack();
+                                }
+                            }
+                        }
                         std::cout << "Please enter the number of words you want to play: ";
                         int numWords;
                         std::cin >> numWords;
