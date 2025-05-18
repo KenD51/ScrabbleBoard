@@ -8,6 +8,8 @@
 #include <sstream>       
 #include <string>         // For string operations
 #include <cstring>        // For handling C-style strings
+#include <climits>
+#include <limits>
 // Added debugging output to input validation loop in Game constructor. 
 
 Game::Game(int num_players) : pass_count(0), playerNum(num_players), current_player_index(0) {
@@ -42,6 +44,11 @@ Game::Game(int num_players) : pass_count(0), playerNum(num_players), current_pla
     }
 
     std::cout << "Remaining LetterBag size: " << bag.Bag.size() << std::endl;
+}
+
+// Returns the number of consecutive passes
+int Game::get_pass_count() const { 
+    return pass_count;
 }
 
 // Determines the turn order of players by drawing unique tiles for each player. This is an incorrect way to do it, but it works for now.
@@ -102,91 +109,186 @@ void Game::determine_turn_order() {
 
 void Game::play_game() {
     bool game_over = false;
-
     while (!game_over) {
-        std::cout << "\nChecking if the game is over..." << std::endl;
-        if (is_game_over()) {
-            std::cout << "Game over condition met." << std::endl;
-            game_over = true;
-            break;
-        }
-
-        for (auto& player : players) {
+        for (int i = 0; i < players.size() && !game_over; i++) {
             bool valid_turn = false;
             while (!valid_turn) {
-                std::cout << "\n=== " << player.get_name() << "'s turn ===" << std::endl;
-                player.rack.print_rack();
+                if (is_game_over()) {
+                    game_over = true;
+                    break;
+                }
+                std::cout << "\n======= " << players[i].get_name() << "'s turn =======" << std::endl;
+                players[i].rack.print_rack();
+
+                std::cout << std::endl << "Pass Count: " << get_pass_count() << std::endl;
+    
+                print_scores();
 
                 std::cout << "\nCurrent Board State:" << std::endl;
                 board.printBoard();
 
-                std::string word;
-                int row, col;
-                char direction;
-                std::cout << "Enter word, row, column, and direction (H/V): ";
-                std::cin >> word >> row >> col >> direction;
+                // Let the player pick what they want to do
+                int selection;
+                if (get_pass_count() < 6 && !is_game_over()) {
+                    std::cout << "\nWhat move would you like to make:\n" << "    1) Play a word      2) Pass      3) Exchange Tiles" << std::endl;
+                    std::cout << "Please enter your number selection (1, 2, or 3): ";
+                    std::cin >> selection;
 
-                // Convert word to uppercase for consistency
-                std::transform(word.begin(), word.end(), word.begin(), ::toupper);
-
-                // Dictionary check
-                if (!dictionaryCheck(word)) {
-                    std::cout << "Word not found in dictionary. Try again." << std::endl;
-                    // Clear the rest of the line to avoid input issues
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                    continue;
-                }
-
-                // Clear the rest of the line to avoid leftover input
-                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-                // Do NOT convert row and col to 0-based indices here! This is super important!!!!
-                // Pass user input (1-based) directly to isValidPlacement
-                bool horizontal = (direction == 'H' || direction == 'h');
-                if (!board.isValidPlacement(word, row, col, horizontal ? 'H' : 'V')) {
-                    std::cout << "Invalid placement. Please try again." << std::endl;
-                    continue;
-                }
-
-                // Do NOT convert row and col to 0-based indices here for play_word either!
-                // The play_word and GameBoard::placeWord logic expects 1-based indices for the first word.
-
-                // Try to play the word
-                if (player.play_word(board, word, row, col, horizontal)) {
-                    // Remove used letters from rack
-                    for (char c : word) {
-                        player.rack.remove_letter(c);
-                    }
-                    player.rack.fill_rack(bag);
-
-                    // Bingo bonus
-                    if (word.length() == 7) {
-                        player.add_points(50);
-                        std::cout << "Bingo! 50 bonus points added!" << std::endl;
+                    // Dealing with errors in entering selection number
+                    while (selection != 1 && selection != 2 && selection != 3) {
+                        // Clear input
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::cout << "Invalid number selection. Please try again: ";
+                        std::cin >> selection;
                     }
 
-                    // Print scores after a successful turn
-                    print_scores();
+                // If end game conditions are met, the player gets an additional selection to end the game
+                } else if (get_pass_count() >= 6 || is_game_over()) {
+                    std::cout << "What move would you like to make:\n" << "    1) Play a word      2) Pass      3) Exchange Tiles      4) End Game" << std::endl;
+                    std::cout << "Enter your number selection (1, 2, 3, or 4): ";
+                    std::cin >> selection;
 
-                    valid_turn = true;
-                    pass_count = 0;
+                    // Dealing with errors in entering selection number
+                    while (selection != 1 && selection != 2 && selection != 3 && selection != 4) {
+                        // Clear input
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                        std::cout << "Invalid number selection. Please try again: ";
+                        std::cin >> selection;
+                    }
+                }
+                if (selection == 4) {
+                    game_over = true;
+                }
+                // Player chooses to play word
+                switch (selection) {
+                    case 1: {
+                        std::string word;
+                        int row, col;
+                        char direction;
+                        std::cout << "Enter word, row, column, and direction (H/V): ";
+                        std::cin >> word >> row >> col >> direction;
 
-                    // Check for game over condition
-                    if (player.get_rack().get_tile_count() == 0 && bag.is_empty()) {
-                        game_over = true;
+                        // Convert word to uppercase for consistency
+                        std::transform(word.begin(), word.end(), word.begin(), ::toupper);
+
+                        // Dictionary check
+                        if (!dictionaryCheck(word)) {
+                            std::cout << "Word not found in dictionary. Try again." << std::endl;
+                            // Clear the rest of the line to avoid input issues
+                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                            continue;
+                        }
+
+                        // Clear the rest of the line to avoid leftover input
+                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                        // Do NOT convert row and col to 0-based indices here! This is super important!!!!
+                        // Pass user input (1-based) directly to isValidPlacement
+                        bool horizontal = (direction == 'H' || direction == 'h');
+                        if (!board.isValidPlacement(word, row, col, horizontal ? 'H' : 'V')) {
+                            std::cout << "Invalid placement. Please try again." << std::endl;
+                            continue;
+                        }
+
+                        // Do NOT convert row and col to 0-based indices here for play_word either!
+                        // The play_word and GameBoard::placeWord logic expects 1-based indices for the first word.
+
+                        // Try to play the word
+                        if (players[i].play_word(board, word, row, col, horizontal)) {
+                            // Remove used letters from rack
+                            for (char c : word) {
+                                players[i].rack.remove_letter(c);
+                            }
+                            players[i].rack.fill_rack(bag);
+
+                            // Bingo bonus
+                            if (word.length() == 7) {
+                                players[i].add_points(50);
+                                std::cout << "Bingo! 50 bonus points added!" << std::endl;
+                            }
+
+                            valid_turn = true;
+                            pass_count = 0;
+                        } else {
+                            std::cout << "Failed to place word. Please try again.\n";
+                            continue;
+                        }
                         break;
                     }
-                } else {
-                    std::cout << "Failed to place word. Try again.\n";
+                    case 2: {
+                        // Player chooses to pass turn
+                        valid_turn = true;
+                        pass_count++;
+                        break;
+                    }
+                    case 3: {
+                        // Player chooses to exchange tiles
+                        std::cout << "Please enter the number of tiles you want to exchange: ";
+                        int n;
+                        std::cin >> n;
+                        
+                        // Error handling
+                        while (n < 1 || n > 7) {
+                            std::cout << "Invalid input. The max is 7 tiles. Please try again: ";
+                            // Clear input
+                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                            std::cin >> n;
+                        }
+
+                        std::cout << "Please enter the letter(s) for the tiles you want to exchange (no spaces between letters): ";
+                        std::string exchange;
+                        std::cin >> exchange;
+                        
+                        try {
+                            for (int a = 0; a < exchange.length(); a++) {
+                                bool found = false;
+                                for (int b = 0; a < players[i].rack.get_tile_count() && !found; a++) {
+                                    if (exchange[a] == players[i].rack[i].get_letter()) {
+                                        found = true;
+                                    }
+                                    if (!found) {
+                                        throw std::invalid_argument("One of the letters is not part of your rack.");
+                                    }
+                                }
+                            }
+                        } catch (const std::invalid_argument& err) {
+                            std::cout << "Please try again: ";
+                            // Clear inputs
+                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                            std::cin >> exchange;
+                        }
+                        
+                        // Process of exchanging letters
+                        for (int j = 0; j < exchange.length(); j++) {
+                            char letter = exchange[j];
+                            players[i].rack.exchange_tile(letter, bag);
+                        }                            
+                        valid_turn = true;
+                        pass_count++;
+                        break;
+                    }
+                    case 4: {
+                        // Player chooses to end the game
+                        std::cout << "Announcing the winner..." << std::endl;
+                        determine_winner();
+                        break;
+                    }
+                }
+                // Give the player who just played an update
+                if (selection != 4) {
+                    std::cout << "\n------- UPDATES -------" << std::endl;
+                    if (selection == 3) {
+                        std::cout << "New Rack Below: " << std::endl;
+                        std::cout << "    ";
+                        players[i].rack.print_rack();
+                    }
+                    std::cout << "Pass Count: " << get_pass_count() << std::endl;
+                    print_scores();
+                    std::cout << std::endl;
                 }
             }
-
-            if (game_over) break;
         }
     }
-
-    std::cout << "Announcing the winner..." << std::endl;
-    announce_winner();
 }
 
 // Utility function to trim whitespace from both ends of a string
@@ -229,11 +331,57 @@ bool Game::is_valid_word(const std::string& word) {
     return !word.empty();
 }
 
-void Game::announce_winner() {
-    // Placeholder implementation: Announce the first player as the winner
-    if (!players.empty()) {
-        std::cout << "The winner is " << players[0].get_name() << "!" << std::endl;
+// Computes the final score of a player by subtracting the points of remaining tiles in their rack.
+// It takes the LetterRack of the player as input and returns the computed score after subtracting tile points.
+int Game::rack_points(LetterRack& rack) {
+    int total_tile_points = 0;  // Initialize variable to accumulate the total points of remaining tiles
+
+    // Loop through each tile in the rack to sum up their points
+    for (int i = 0; i < rack.SIZE; i++) {
+        total_tile_points += rack[i].get_point_value();  // Add the point value of the tile to total
     }
+
+    // Return the total points of remaining tiles in the player's rack
+    return total_tile_points;
+}
+// Determines the winner(s) of the game based on their final scores and displays the results.
+void Game::determine_winner() {
+    std::vector<std::string> winners;    // Vector to hold the names of the winners
+    int highest_score = INT_MIN;         // Initialize the highest score to the smallest possible integer value
+
+    // Loop through each player to calculate their final score
+    for (auto& player : players) {
+        // Compute the player's final score: their total points minus the points of remaining tiles in their rack
+        int final_score = player.get_points() - rack_points(player.rack);
+
+        // If the current player's final score is higher than the highest score so far, update the highest score
+        // and clear the list of winners to only include the current player
+        if (final_score > highest_score) {
+            highest_score = final_score;
+            winners.clear();        // Clear previous winners
+            winners.push_back(player.get_name());  // Add the current player as the only winner
+        } 
+        // If the current player's final score equals the highest score, add them to the list of winners
+        else if (final_score == highest_score) {
+            winners.push_back(player.get_name());
+        }
+    }
+
+    // Display the end game results
+    std::cout << "\n====== Game Over ======" << std::endl;
+    
+    // Print each player's name along with their final score
+    for (auto& player : players) {
+        int final_score = player.get_points() - rack_points(player.rack);
+        std::cout << player.get_name() << ": " << final_score << " points" << std::endl;
+    }
+
+    // Announce the winner(s)
+    std::cout << "\nWinner(s): ";
+    for (const auto& winner : winners) {
+        std::cout << winner << " ";   // Print all players with the highest score
+    }
+    std::cout << std::endl;  // Print newline at the end of the winner list
 }
 
 // Updated is_game_over. 

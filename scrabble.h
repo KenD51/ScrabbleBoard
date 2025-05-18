@@ -49,6 +49,9 @@ public:
     
     // Refills the rack with tiles from the bag
     void fill_rack(LetterBag& bag);
+
+    // Exchange tile
+    void exchange_tile(const char letter, LetterBag& bag);
     
     // Displays the current tiles in the rack
     void print_rack() const;
@@ -57,7 +60,6 @@ public:
     int get_tile_count() const;
 
     // Access operator for tiles in the rack
-    LetterTile& operator[](int index);
     const LetterTile& operator[](int index) const;
 };
 
@@ -159,7 +161,7 @@ private:
     int current_player_index;    // Index of current player
     
 public:
-    // Constructor with optional player count
+    // Constructor with optional player count and pass count
     Game(int num_players = 0);
     
     // Main game loop
@@ -170,6 +172,9 @@ public:
     
     // Determines and announces the winner
     void determine_winner();
+
+    // Compute the number of points remaining on the player's rack
+    int rack_points(LetterRack& rack);    
     
     // Establishes initial turn order
     void determine_turn_order();
@@ -194,16 +199,6 @@ public:
     void announce_winner();
 
     void print_scores() const;
-};
-
-// Added EndGame class declaration
-class EndGame {
-public:
-    // Computes the final score for a player based on their remaining tiles
-    int rack_points(LetterRack& rack);
-
-    // Determines the winner of the game
-    void determine_winner(Game& scrabble);
 };
 
 #endif // SCRABBLE_H

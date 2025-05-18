@@ -13,4 +13,5 @@ Compilation Instructions:
    c. Typing cd ______ changes your directory to the one you specificed
 7. Compile by typing: c++ -o play main.cpp Player.cpp Game.cpp GameBoard.cpp EndGame.cpp LetterBag.cpp LetterRack.cpp LetterTile.cpp
 8. Run the executable by typing: ./play
-9. Play scrabble by following the instructions outputted to the screen
+9. Read the scrabble instructions printed to the screen
+10. Start playing the game by pressing enter

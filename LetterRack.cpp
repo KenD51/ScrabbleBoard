@@ -27,8 +27,8 @@ LetterTile LetterRack::remove_letter(char letter) {
         if (rack[i].get_letter() == letter) {
             // Save the found tile
             LetterTile tmp = rack[i];
-            // Replace with placeholder ('?' tile with 0 points)
-            rack[i] = LetterTile('?', 0);
+            // Replace with placeholder (' ' tile with 0 points)
+            rack[i] = LetterTile(' ', 0);
             tile_count--;  // Decrement tile count
             return tmp;    // Return the removed tile
         }
@@ -53,6 +53,13 @@ void LetterRack::fill_rack(LetterBag& bag) {
     }
 }
 
+// Exchange tile
+void LetterRack::exchange_tile(const char letter, LetterBag& bag) {
+    LetterTile removed_tile = remove_letter(letter);
+    bag.addTiles(letter, 1, removed_tile.get_point_value());
+    fill_rack(bag);
+};
+
 // Displays the current letters in the rack
 void LetterRack::print_rack() const {
     std::cout << "Your rack contains: ";
@@ -71,13 +78,6 @@ int LetterRack::get_tile_count() const {
 }
 
 // Added operator[] to access tiles in the rack
-LetterTile& LetterRack::operator[](int index) {
-    if (index < 0 || index >= SIZE) {
-        throw std::out_of_range("Index out of bounds");
-    }
-    return rack[index];
-}
-
 const LetterTile& LetterRack::operator[](int index) const {
     if (index < 0 || index >= SIZE) {
         throw std::out_of_range("Index out of bounds");
