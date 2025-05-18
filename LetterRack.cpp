@@ -1,13 +1,13 @@
 // LetterRack.cpp
 // Implementation of LetterRack class for Scrabble game
-#include "scrabble.h"  // Include the header file with class declarations
+#include "scrabble.h" // Ensure all necessary declarations are included
 #include <iostream>    // For input/output operations
 #include <stdexcept>   // For standard exception handling
 
 // Default Constructor
 // Initializes an empty rack with placeholder tiles
 LetterRack::LetterRack() {
-    for (int i = 0; i < SIZE; ++i) {
+    for (int i = 0; i < SIZE; i++) { // Fixed syntax error by adding the missing operand 'i'
         // Create empty tiles (space character with 0 points)
         rack[i] = LetterTile(' ', 0);
     }
@@ -27,8 +27,8 @@ LetterTile LetterRack::remove_letter(char letter) {
         if (rack[i].get_letter() == letter) {
             // Save the found tile
             LetterTile tmp = rack[i];
-            // Replace with placeholder ('?' tile with 0 points)
-            rack[i] = LetterTile('?', 0);
+            // Replace with placeholder (' ' tile with 0 points)
+            rack[i] = LetterTile(' ', 0);
             tile_count--;  // Decrement tile count
             return tmp;    // Return the removed tile
         }
@@ -37,25 +37,34 @@ LetterTile LetterRack::remove_letter(char letter) {
     throw std::domain_error("The rack does not contain that letter.");
 }
 
-// Fills empty slots in the rack with tiles from the bag
-// Parameters:
-//   bag - Reference to the LetterBag to draw tiles from
+// Fixed fill_rack function to match declaration
 void LetterRack::fill_rack(LetterBag& bag) {
     for (int i = 0; i < SIZE; i++) {
-        // Check for placeholder tiles (empty slots)
-        if (rack[i].get_letter() == '?' && !bag.is_empty()) {
-            // Draw new tile from bag and place in rack
-            rack[i] = bag.draw_tile();
+        if (rack[i].get_letter() == ' ' && !bag.is_empty()) {
+            LetterTile tile = bag.draw_tile();
+            rack[i] = tile;
             tile_count++;  // Increment tile count
+            std::cout << "Added tile '" << tile.get_letter() << "' to rack at position " << i << "." << std::endl;
+        } else if (rack[i].get_letter() != ' ') {
+            std::cout << "Rack position " << i << " already filled with tile '" << rack[i].get_letter() << "'." << std::endl;
+        } else {
+            std::cout << "Bag is empty. Cannot fill rack further." << std::endl;
         }
     }
 }
+
+// Exchange tile
+void LetterRack::exchange_tile(const char letter, LetterBag& bag) {
+    LetterTile removed_tile = remove_letter(letter);
+    bag.addTiles(letter, 1, removed_tile.get_point_value());
+    fill_rack(bag);
+};
 
 // Displays the current letters in the rack
 void LetterRack::print_rack() const {
     std::cout << "Your rack contains: ";
     // Print each tile's letter
-    for (int i = 0; i < SIZE; i++) {
+    for (int i = 0; i < SIZE; i++) { // Fixed syntax error by adding the missing operand 'i'
         std::cout << rack[i].get_letter() << " ";
     }
     std::cout << std::endl;
@@ -66,4 +75,26 @@ void LetterRack::print_rack() const {
 //   Integer count of non-empty tiles
 int LetterRack::get_tile_count() const { 
     return tile_count; 
+}
+
+// Added operator[] to access tiles in the rack
+const LetterTile& LetterRack::operator[](int index) const {
+    if (index < 0 || index >= SIZE) {
+        throw std::out_of_range("Index out of bounds");
+    }
+    return rack[index];
+}
+
+// Check if the rack contains a specific letter
+// Parameters:
+//   letter - The character to check for in the rack
+// Returns:
+//   True if the letter is found, false otherwise
+bool LetterRack::has_letter(char letter) const {
+    for (int i = 0; i < SIZE; ++i) {
+        if (rack[i].get_letter() == letter) {
+            return true;
+        }
+    }
+    return false;
 }

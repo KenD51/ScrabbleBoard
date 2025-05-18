@@ -5,7 +5,7 @@
 
 // Computes the final score of a player by subtracting the points of remaining tiles in their rack.
 // It takes the LetterRack of the player as input and returns the computed score after subtracting tile points.
-int EndGame::compute_final_score(LetterRack& rack) {
+int compute_final_score(const LetterRack& rack) {
     int total_tile_points = 0;  // Initialize variable to accumulate the total points of remaining tiles
 
     // Loop through each tile in the rack to sum up their points
@@ -17,12 +17,12 @@ int EndGame::compute_final_score(LetterRack& rack) {
     return total_tile_points;
 }
 // Determines the winner(s) of the game based on their final scores and displays the results.
-void EndGame::determine_winner(Game& scrabble) {
+void announce_winner(const std::vector<Player>& players) {
     std::vector<std::string> winners;    // Vector to hold the names of the winners
     int highest_score = INT_MIN;         // Initialize the highest score to the smallest possible integer value
 
     // Loop through each player to calculate their final score
-    for (auto& player : scrabble.players) {
+    for (const auto& player : players) {
         // Compute the player's final score: their total points minus the points of remaining tiles in their rack
         int final_score = player.get_points() - compute_final_score(player.rack);
 
@@ -43,7 +43,7 @@ void EndGame::determine_winner(Game& scrabble) {
     std::cout << "\n=== Game Over ===" << std::endl;
     
     // Print each player's name along with their final score
-    for (auto& player : scrabble.players) {
+    for (const auto& player : players) {
         int final_score = player.get_points() - compute_final_score(player.rack);
         std::cout << player.get_name() << ": " << final_score << " points" << std::endl;
     }
@@ -54,4 +54,12 @@ void EndGame::determine_winner(Game& scrabble) {
         std::cout << winner << " ";   // Print all players with the highest score
     }
     std::cout << std::endl;  // Print newline at the end of the winner list
+}
+
+// Function to handle the end of the game
+void end_game(Game& game) {
+    // Compute final scores and determine winners
+    announce_winner(game.players);
+
+    // Additional end game procedures can be added here
 }
