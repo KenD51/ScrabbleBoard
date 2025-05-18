@@ -151,17 +151,15 @@ public:
 
 // Class representing the game controller
 class Game {
-public:
-    std::vector<Player> players; // Made players public for accessibility
-
 private:
     int noPointTurn_count;       // Count of consecutive turns with no points earned
     int playerNum;               // Number of players
     GameBoard board;             // Game board
     LetterBag bag;               // Tile bag
     int current_player_index;    // Index of current player
-    
 public:
+    std::vector<Player> players; // Made players public for accessibility
+
     // Constructor with optional player count
     Game(int num_players = 0);
     
