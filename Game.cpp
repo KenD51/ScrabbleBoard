@@ -223,12 +223,26 @@ void Game::play_game() {
                                 break;
                             }
 
-                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
                             bool horizontal = (direction == 'H' || direction == 'h');
-                            if (!board.isValidPlacement(word, row, col, horizontal ? 'H' : 'V')) {
+                            while (!board.isValidPlacement(word, row, col, horizontal ? 'H' : 'V')) {
                                 std::cout << "Invalid placement. Please try again." << std::endl;
-                                continue;
+                                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input
+                                std::string word;
+                                int row, col;
+                                char direction;
+                                std::cout << "Enter word #" << j << ", row, column, and direction (H/V): ";
+                                std::cin >> word >> row >> col >> direction;
+
+                                // Convert word to uppercase for consistencyi
+                                std::transform(word.begin(), word.end(), word.begin(), ::toupper);
+
+                                // Dictionary check
+                                if (!dictionaryCheck(word)) {
+                                    std::cout << "Word not found in dictionary. No points earned and turn ends." << std::endl;
+                                    noPointTurn_count++;
+                                    valid_turn = true;
+                                    break;
+                                }
                             }
 
                             if (!board.allAdjacentWordsValid(word, row, col, horizontal, *this)) {
