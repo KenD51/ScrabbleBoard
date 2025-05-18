@@ -121,7 +121,6 @@ class Player {
 private:
     std::string name;        // Player's name
     int points;              // Player's current score
-
 public:
     LetterRack rack;         // Player's tile rack (moved to public for accessibility)
 
