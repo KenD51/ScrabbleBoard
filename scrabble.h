@@ -49,7 +49,10 @@ public:
 
     // Exchange tile
     void exchange_tile(const char letter, LetterBag& bag);
-    
+
+    // Replace a tile
+    void replace_tile(int index, LetterTile& newTile);   
+ 
     // Displays the current tiles in the rack
     void print_rack() const;
     

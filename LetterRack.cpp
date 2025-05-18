@@ -53,6 +53,11 @@ void LetterRack::fill_rack(LetterBag& bag) {
     }
 }
 
+// Replaces a tile
+void LetterRack::replace_tile(int index, LetterTile& newTile) {
+    rack[index] = newTile;
+}
+
 // Exchange tile
 void LetterRack::exchange_tile(const char letter, LetterBag& bag) {
     LetterTile removed_tile = remove_letter(letter);

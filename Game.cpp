@@ -156,20 +156,38 @@ void Game::play_game() {
                 // Player chooses to play word
                 switch (selection) {
                     case 1: {
+                        // If there is a blank tile in the player's rack, ask if they want to use it
                         for (int k = 0; k < 7; k++){
                             if( players[i].rack[k].get_letter() == '*'){
-                                std::cout << "Do you want to use the blank tile ?(y/n)"<< std::endl;
+                                std::cout << "Do you want to use the blank tile? (y/n): ";
                                 char ans;
-                                std::cin>> ans;
+                                std::cin >> ans;
+
+                                // Handle non-char input and invalid letter inputs
+                                while (std::cin.fail() || (ans != 'y' && ans != 'Y' && ans != 'N' && ans != 'n')) {
+                                    std::cin.clear(); // Clear error state
+                                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+                                    std::cout << "Invalid answer. Please try again and answer y/n: ";
+                                    std::cin >> ans;
+                                }
+                                
+                                // Replace the blank tile with a tile that has their desired letter, worth 0 points
                                 if(ans == 'y' || ans == 'Y'){
-                                    LetterTile l = players[i].rack.remove_letter('*');
-                                    bag.addTiles('*', 1, 0);
-                                    std::cout << "What letter do you want?" <<std::endl;
+                                    std::cout << "Enter the letter you want the blank tile to be: ";
                                     char as;
                                     std::cin >> as;
-                                    LetterTile l2 = LetterTile(as, 0);
-                                    players[i].rack[k] = l2;
-                                    std::cout << "Letter rack updated : "<<std::endl;
+                                    
+                                    // Handle non-letter inputs
+                                    while (!std::isalpha(as)) {
+                                        std::cin.clear(); // Clear error state
+                                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+                                        std::cout << "Invalid letter. Please try again: ";
+                                        std::cin >> as;
+                                    }                                    
+
+                                    LetterTile l = LetterTile(std::toupper(as), 0);
+                                    players[i].rack.replace_tile(k, l);
+                                    std::cout << "------- Letter Rack Updated -------" << std::endl;
                                     players[i].rack.print_rack();
                                 }
                             }
@@ -287,7 +305,7 @@ void Game::play_game() {
                         while (std::cin.fail() || n < 1 || n > players[i].rack.get_tile_count()) {
                             std::cin.clear(); // Clear error state
                             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
-                            std::cout << "Invalid input. The max is " << players[i].rack.get_tile_count() << " tiles. Please try again: ";
+                            std::cout << "Invalid input. The max is " << players[i].rack.get_tile_count() << " tiles, and the min is 1 tile. Please try again: ";
                             std::cin >> n;
                         }
 
@@ -370,6 +388,7 @@ void Game::play_game() {
                     std::cout << "No Point Turns Count: " << get_noPointTurn_count() << std::endl;
                     print_scores();
                     std::cout << "Tiles Left in Bag: " << bag.Bag.size() << std::endl;
+                    std::cout << "-----------------------" << std::endl << std::endl;
                 }
             }
         }
