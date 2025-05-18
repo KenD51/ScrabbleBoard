@@ -56,9 +56,9 @@ void LetterRack::fill_rack(LetterBag& bag) {
 // Exchange tile
 void LetterRack::exchange_tile(const char letter, LetterBag& bag) {
     LetterTile removed_tile = remove_letter(letter);
-    bag.addTiles(letter, 1, removed_tile.get_point_value());
+    bag.addTiles(removed_tile.get_letter(), 1, removed_tile.get_point_value());
     fill_rack(bag);
-};
+}
 
 // Displays the current letters in the rack
 void LetterRack::print_rack() const {
@@ -97,8 +97,4 @@ bool LetterRack::has_letter(char letter) const {
         }
     }
     return false;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 66a62017c2906d85956b6e83de90e344fecd494e
