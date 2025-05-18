@@ -11,9 +11,8 @@
 #include <climits>
 #include <limits>
 #include <stdexcept>
-// Added debugging output to input validation loop in Game constructor. 
 
-Game::Game(int num_players) : pass_count(0), playerNum(num_players), current_player_index(0) {
+Game::Game(int num_players) : noPointTurn_count(0), playerNum(num_players), current_player_index(0) {
     std::cout << "Initializing game with " << playerNum << " players." << std::endl;
     while (playerNum < 2 || playerNum > 4) {
         std::cout << "Invalid number of players. Please enter a number between 2 and 4: ";
@@ -35,21 +34,19 @@ Game::Game(int num_players) : pass_count(0), playerNum(num_players), current_pla
     // Determine turn order
     determine_turn_order();
 
-    // Debugging output to check LetterBag and racks. 
-    std::cout << "Initial LetterBag size: " << bag.Bag.size() << std::endl;
-
     // Fill racks
     for (auto& player : players) {
+        std::cout << "------- Filling " << player.get_name() << "'s Rack Process-------" << std::endl;
         player.rack.fill_rack(bag);
         std::cout << "Rack for player " << player.get_name() << " filled with " << player.rack.get_tile_count() << " tiles." << std::endl;
     }
 
-    std::cout << "Remaining LetterBag size: " << bag.Bag.size() << std::endl;
+    std::cout << "\nRemaining LetterBag size: " << bag.Bag.size() << std::endl;
 }
 
-// Returns the number of consecutive passes
-int Game::get_pass_count() const { 
-    return pass_count;
+// Returns the number of consecutive turns with no points earned
+int Game::get_noPointTurn_count() const { 
+    return noPointTurn_count;
 }
 
 // Determines the turn order of players by drawing unique tiles for each player. This is an incorrect way to do it, but it works for now.
@@ -114,14 +111,10 @@ void Game::play_game() {
         for (int i = 0; i < players.size() && !game_over; i++) {
             bool valid_turn = false;
             while (!valid_turn) {
-                if (is_game_over()) {
-                    game_over = true;
-                    break;
-                }
                 std::cout << "\n======= " << players[i].get_name() << "'s turn =======" << std::endl;
                 players[i].rack.print_rack();
 
-                std::cout << std::endl << "Pass Count: " << get_pass_count() << std::endl;
+                std::cout << std::endl << "No Point Turns Count: " << get_noPointTurn_count() << std::endl;
     
                 print_scores();
 
@@ -130,8 +123,8 @@ void Game::play_game() {
 
                 // Let the player pick what they want to do
                 int selection;
-                if (get_pass_count() < 6 && !is_game_over()) {
-                    std::cout << "\nWhat move would you like to make:\n" << "    1) Play a word      2) Pass      3) Exchange Tiles" << std::endl;
+                if (get_noPointTurn_count() < 6 && !is_game_over()) {
+                    std::cout << "\nWhat move would you like to make:\n" << "    1) Play word(s)      2) Pass      3) Exchange Tiles" << std::endl;
                     std::cout << "Please enter your number selection (1, 2, or 3): ";
                     std::cin >> selection;
 
@@ -144,8 +137,8 @@ void Game::play_game() {
                     }
 
                 // If end game conditions are met, the player gets an additional selection to end the game
-                } else if (get_pass_count() >= 6 || is_game_over()) {
-                    std::cout << "What move would you like to make:\n" << "    1) Play a word      2) Pass      3) Exchange Tiles      4) End Game" << std::endl;
+                } else if (get_noPointTurn_count() >= 6 || is_game_over()) {
+                    std::cout << "What move would you like to make:\n" << "    1) Play word(s)      2) Pass      3) Exchange Tiles      4) End Game" << std::endl;
                     std::cout << "Enter your number selection (1, 2, 3, or 4): ";
                     std::cin >> selection;
 
@@ -163,70 +156,91 @@ void Game::play_game() {
                 // Player chooses to play word
                 switch (selection) {
                     case 1: {
-                        std::string word;
-                        int row, col;
-                        char direction;
-                        std::cout << "Enter word, row, column, and direction (H/V): ";
-                        std::cin >> word >> row >> col >> direction;
+                        std::cout << "Please enter the number of words you want to play: ";
+                        int numWords;
+                        std::cin >> numWords;
+                        
+                        // Handle non-integer input
+                        while (std::cin.fail()) {
+                            std::cin.clear(); // Clear error state
+                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Discard invalid input
+                            std::cout << "Invalid number of words. Please try again: ";
+                            std::cin >> numWords;
+                        } 
+                        
+                        bool play_success = false;
+                        for (int j = 1; j <= numWords; j++) {
+                            std::string word;
+                            int row, col;
+                            char direction;
+                            std::cout << "Enter word #" << j << ", row, column, and direction (H/V): ";
+                            std::cin >> word >> row >> col >> direction;
 
-                        // Convert word to uppercase for consistency
-                        std::transform(word.begin(), word.end(), word.begin(), ::toupper);
+                            // Convert word to uppercase for consistency
+                            std::transform(word.begin(), word.end(), word.begin(), ::toupper);
 
-                        // Dictionary check
-                        if (!dictionaryCheck(word)) {
-                            std::cout << "Word not found in dictionary. Try again." << std::endl;
-                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                            continue;
-                        }
-
-                        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-                        bool horizontal = (direction == 'H' || direction == 'h');
-                        if (!board.isValidPlacement(word, row, col, horizontal ? 'H' : 'V')) {
-                            std::cout << "Invalid placement. Please try again." << std::endl;
-                            continue;
-                        }
-
-                        if (!board.allAdjacentWordsValid(word, row, col, horizontal, *this)) {
-                            std::cout << "Invalid move: All words formed (including adjacent) must be valid dictionary words." << std::endl;
-                            continue;
-                        }
-
-                        // Only remove letters from rack that are actually placed (not already on board)
-                        std::vector<char> letters_to_remove;
-                        int r = row - 1;
-                        int c = col - 1;
-                        bool can_place = true;
-                        for (size_t idx = 0; idx < word.size(); ++idx) {
-                            int cur_r = r + (horizontal ? 0 : idx);
-                            int cur_c = c + (horizontal ? idx : 0);
-                            char board_letter = board.getTile(cur_r, cur_c);
-                            if (std::toupper(board_letter) == word[idx]) {
-                                continue;
-                            }
-                            if (!players[i].rack.has_letter(word[idx])) {
-                                std::cout << "You do not have the letter '" << word[idx] << "' in your rack and it's not on the board at this position. Try again.\n";
-                                can_place = false;
+                            // Dictionary check
+                            if (!dictionaryCheck(word)) {
+                                std::cout << "Word not found in dictionary. No points earned and turn ends." << std::endl;
+                                noPointTurn_count++;
+                                valid_turn = true;
                                 break;
                             }
-                            letters_to_remove.push_back(word[idx]);
+
+                            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+                            bool horizontal = (direction == 'H' || direction == 'h');
+                            if (!board.isValidPlacement(word, row, col, horizontal ? 'H' : 'V')) {
+                                std::cout << "Invalid placement. Please try again." << std::endl;
+                                continue;
+                            }
+
+                            if (!board.allAdjacentWordsValid(word, row, col, horizontal, *this)) {
+                                std::cout << "Invalid move: All words formed (including adjacent) must be valid dictionary words. No points earned and turn ends." << std::endl;
+                                valid_turn = true;
+                                noPointTurn_count++;
+                                break;
+                            }
+
+                            // Only remove letters from rack that are actually placed (not already on board)
+                            std::vector<char> letters_to_remove;
+                            int r = row - 1;
+                            int c = col - 1;
+                            bool can_place = true;
+                            for (size_t idx = 0; idx < word.size(); ++idx) {
+                                int cur_r = r + (horizontal ? 0 : idx);
+                                int cur_c = c + (horizontal ? idx : 0);
+                                char board_letter = board.getTile(cur_r, cur_c);
+                                if (std::toupper(board_letter) == word[idx]) {
+                                    continue;
+                                }
+                                if (!players[i].rack.has_letter(word[idx])) {
+                                    std::cout << "You do not have the letter '" << word[idx] << "' in your rack and it's not on the board at this position. Try again.\n";
+                                    can_place = false;
+                                    break;
+                                }
+                                letters_to_remove.push_back(word[idx]);
+                            }
+                            if (!can_place) {
+                                continue;
+                            }
+                            play_success = players[i].play_word(board, word, row, col, horizontal);
+                            if (play_success) {
+                                for (char c : letters_to_remove) {
+                                    players[i].rack.remove_letter(c);
+                                }
+
+                                if (letters_to_remove.size() == 7) {
+                                    players[i].add_points(50);
+                                    std::cout << "Bingo! 50 bonus points added!" << std::endl;
+                                }
+                            }
                         }
-                        if (!can_place) {
-                            continue;
-                        }
-                        bool play_success = players[i].play_word(board, word, row, col, horizontal);
                         if (play_success) {
-                            for (char c : letters_to_remove) {
-                                players[i].rack.remove_letter(c);
-                            }
-
-                            if (letters_to_remove.size() == 7) {
-                                players[i].add_points(50);
-                                std::cout << "Bingo! 50 bonus points added!" << std::endl;
-                            }
-
                             try {
+                                std::cout << "\n------- Filling " << players[i].get_name() << "'s Rack Process-------" << std::endl; 
                                 players[i].rack.fill_rack(bag);
+                                noPointTurn_count = 0;
                             } catch (const std::runtime_error& err) {
                                 // Check if end game condition met
                                 if (players[i].rack.get_tile_count() == 0) {
@@ -235,19 +249,14 @@ void Game::play_game() {
                                     std::cerr << err.what() << std::endl;
                                 }
                             }
-
-                            valid_turn = true;
-                            pass_count = 0;
-                        } else {
-                            std::cout << "Failed to place word: adjacent words are not valid. Please try again.\n";
-                            continue;
                         }
+                        valid_turn = true;
                         break;
                     }
                     case 2: {
                         // Player chooses to pass turn
                         valid_turn = true;
-                        pass_count++;
+                        noPointTurn_count++;
                         break;
                     }
                     case 3: {
@@ -319,7 +328,7 @@ void Game::play_game() {
                                 continue; // Re-prompt for exchange if any letter failed
                             }
                             valid_turn = true;
-                            pass_count++;
+                            noPointTurn_count++;
                             break;
                         }
                         break;
@@ -340,9 +349,9 @@ void Game::play_game() {
                         std::cout << "    ";
                         players[i].rack.print_rack();
                     }
-                    std::cout << "Pass Count: " << get_pass_count() << std::endl;
+                    std::cout << "No Point Turns Count: " << get_noPointTurn_count() << std::endl;
                     print_scores();
-                    std::cout << std::endl;
+                    std::cout << "Tiles Left in Bag: " << bag.Bag.size() << std::endl;
                 }
             }
         }
@@ -360,7 +369,7 @@ static std::string trim(const std::string& s) {
  // Checks if the word is part of the dictionary
 bool Game::dictionaryCheck(const std::string& word) {
     // Try both "words.txt" and "words" for compatibility
-    std::ifstream input_file("words.txt");
+    std::ifstream input_file("words");
     if (input_file.fail()) {
         input_file.clear();
         input_file.open("words");
@@ -382,12 +391,6 @@ bool Game::dictionaryCheck(const std::string& word) {
         }
     }
     return false;
-}
-
-// Added definitions for is_valid_word and announce_winner becuse they didn't exist apparently.
-bool Game::is_valid_word(const std::string& word) {
-    // Placeholder implementation: Assume all words are valid
-    return !word.empty();
 }
 
 // Computes the final score of a player by subtracting the points of remaining tiles in their rack.
@@ -427,7 +430,7 @@ void Game::determine_winner() {
     }
 
     // Display the end game results
-    std::cout << "\n====== Game Over ======" << std::endl;
+    std::cout << "\n======= Game Over =======" << std::endl;
     
     // Print each player's name along with their final score
     for (auto& player : players) {
@@ -463,6 +466,6 @@ bool Game::is_game_over() const {
 void Game::print_scores() const {
     std::cout << "Current Scores:" << std::endl;
     for (const auto& player : players) {
-        std::cout << << player.get_name() << " has " << player.get_points() << " points" << std::endl;
+        std::cout << "    " << player.get_name() << " has " << player.get_points() << " points" << std::endl;
     }
 }
