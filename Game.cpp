@@ -10,6 +10,7 @@
 #include <cstring>        // For handling C-style strings
 #include <climits>
 #include <limits>
+#include <stdexcept>
 // Added debugging output to input validation loop in Game constructor. 
 
 Game::Game(int num_players) : pass_count(0), playerNum(num_players), current_player_index(0) {
@@ -218,11 +219,21 @@ void Game::play_game() {
                             for (char c : letters_to_remove) {
                                 players[i].rack.remove_letter(c);
                             }
-                            players[i].rack.fill_rack(bag);
 
                             if (letters_to_remove.size() == 7) {
                                 players[i].add_points(50);
                                 std::cout << "Bingo! 50 bonus points added!" << std::endl;
+                            }
+
+                            try {
+                                players[i].rack.fill_rack(bag);
+                            } catch (const std::runtime_error& err) {
+                                // Check if end game condition met
+                                if (players[i].rack.get_tile_count() == 0) {
+                                    game_over = true;
+                                } else {
+                                    std::cerr << err.what() << std::endl;
+                                }
                             }
 
                             valid_turn = true;
@@ -315,6 +326,7 @@ void Game::play_game() {
                     }
                     case 4: {
                         // Player chooses to end the game
+                        valid_turn = true;
                         std::cout << "Announcing the winner..." << std::endl;
                         determine_winner();
                         break;
@@ -335,6 +347,7 @@ void Game::play_game() {
             }
         }
     }
+    return;
 }
 
 // Utility function to trim whitespace from both ends of a string
