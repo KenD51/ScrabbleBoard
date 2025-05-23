@@ -40,5 +40,6 @@ Clang (Any C++ Compiler Should work)
 ## Disclaimer
 This project is for educational purposes only. Redistribution of this code for academic credit or without permission from all group members is prohibited.
 
-# Preview: ![image](https://github.com/user-attachments/assets/0fc2d478-dd50-44f0-a1de-ed785cf39447)
+# Preview
+![image](https://github.com/user-attachments/assets/0fc2d478-dd50-44f0-a1de-ed785cf39447)
 
